@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://v7mdy5b2qjrq"]
+
+[ext_resource type="Texture2D" uid="uid://b2u34jhfj5lge" path="res://kenney_tiny-dungeon/Tiles/tile_0104.png" id="1_74bdg"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_e4ynd"]
+a = Vector2(0, -8)
+b = Vector2(0, 8)
+
+[node name="Sword" type="Area2D"]
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_74bdg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("SegmentShape2D_e4ynd")

@@ -1,27 +1,32 @@
-[gd_scene load_steps=6 format=3 uid="uid://bv7lanwyp0tfh"]
+[gd_scene load_steps=4 format=3 uid="uid://bv7lanwyp0tfh"]
 
 [ext_resource type="Script" uid="uid://dokd2dnoda5ic" path="res://player.gd" id="1_onrkg"]
-[ext_resource type="PackedScene" uid="uid://v7mdy5b2qjrq" path="res://sword.tscn" id="2_hqtel"]
 [ext_resource type="Texture2D" uid="uid://c4ay7g4xwhay6" path="res://kenney_tiny-dungeon/Tiles/tile_0087.png" id="2_i3pqv"]
-[ext_resource type="Script" uid="uid://dfw0g15kkwdx" path="res://sword.gd" id="4_hqtel"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hqtel"]
-size = Vector2(16, 16)
+size = Vector2(14, 13)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_onrkg")
-weapon = ExtResource("2_hqtel")
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_i3pqv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_hqtel")
 
-[node name="Sword Pivot" type="Node2D" parent="."]
+[node name="ColliderChecks" type="Node2D" parent="."]
 
-[node name="Sword" parent="Sword Pivot" instance=ExtResource("2_hqtel")]
-position = Vector2(8, 0)
-rotation = 1.5707964
-script = ExtResource("4_hqtel")
+[node name="ColliderCheckN" type="RayCast2D" parent="ColliderChecks"]
+target_position = Vector2(0, -32)
+
+[node name="ColliderCheckE" type="RayCast2D" parent="ColliderChecks"]
+target_position = Vector2(32, 0)
+
+[node name="ColliderCheckS" type="RayCast2D" parent="ColliderChecks"]
+target_position = Vector2(0, 32)
+
+[node name="ColliderCheckW" type="RayCast2D" parent="ColliderChecks"]
+target_position = Vector2(-32, 0)

@@ -1,13 +1,10 @@
 [gd_scene load_steps=14 format=3 uid="uid://ctvexehac65sy"]
 
 [ext_resource type="Script" uid="uid://khg2dm5elll3" path="res://Scripts/world_generator.gd" id="1_wi4s2"]
-[ext_resource type="Script" uid="uid://chhvkww3w6777" path="res://Scripts/camera_2d.gd" id="2_1cg1e"]
 [ext_resource type="TileSet" uid="uid://vvhkbecwew3d" path="res://Scenes/Ground.tres" id="2_wi5qt"]
 [ext_resource type="TileSet" uid="uid://bpf6f6qouayim" path="res://Scenes/Foam.tres" id="3_i5f1r"]
-[ext_resource type="Texture2D" uid="uid://lhvvou7fj1wo" path="res://NewAssets/Tiny Swords (Update 010)/Terrain/Water/Water.png" id="3_wi5qt"]
 [ext_resource type="TileSet" uid="uid://sf6nwxtrxdsa" path="res://Scenes/Rocks.tres" id="5_1cg1e"]
 [ext_resource type="Texture2D" uid="uid://cd0wgg5bwysmo" path="res://NewAssets/Tiny Swords (Update 010)/Terrain/Bridge/Bridge_All 2x.png" id="6_0jmbr"]
-[ext_resource type="PackedScene" uid="uid://26f72w3m8qnc" path="res://Scenes/enemy_torch.tscn" id="8_4gj3w"]
 
 [sub_resource type="Gradient" id="Gradient_wi5qt"]
 offsets = PackedFloat32Array(0, 0.17183101, 0.32999998, 0.57, 0.81)
@@ -23,6 +20,24 @@ fractal_gain = 0.45
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_i5f1r"]
 noise = SubResource("FastNoiseLite_jxerf")
 color_ramp = SubResource("Gradient_wi5qt")
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_i5f1r"]
+vertices = PackedVector2Array(64, 64, -64, 64, -64, -64, 64, -64)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_1cg1e"]
+vertices = PackedVector2Array(64, 64, -64, 64, -64, -64, 64, -64)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_0jmbr"]
+vertices = PackedVector2Array(64, 64, -64, 64, -64, -64, 64, -64)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)])
+agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4gj3w"]
 texture = ExtResource("6_0jmbr")
@@ -528,28 +543,34 @@ texture_region_size = Vector2i(128, 128)
 0:0/0/terrain_set = 0
 0:0/0/terrain = 0
 0:0/0/terrains_peering_bit/right_side = 0
+0:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_i5f1r")
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 0
 1:0/0/terrains_peering_bit/right_side = 0
 1:0/0/terrains_peering_bit/left_side = 0
+1:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_i5f1r")
 2:0/0 = 0
 2:0/0/terrain_set = 0
 2:0/0/terrain = 0
 2:0/0/terrains_peering_bit/left_side = 0
+2:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_i5f1r")
 0:1/0 = 0
 0:1/0/terrain_set = 0
 0:1/0/terrain = 0
 0:1/0/terrains_peering_bit/bottom_side = 0
+0:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_1cg1e")
 0:2/0 = 0
 0:2/0/terrain_set = 0
 0:2/0/terrain = 0
 0:2/0/terrains_peering_bit/bottom_side = 0
 0:2/0/terrains_peering_bit/top_side = 0
+0:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_0jmbr")
 0:3/0 = 0
 0:3/0/terrain_set = 0
 0:3/0/terrain = 0
 0:3/0/terrains_peering_bit/top_side = 0
+0:3/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_0jmbr")
 1:2/0 = 0
 1:2/0/terrain_set = 0
 1:2/0/terrain = 0
@@ -559,21 +580,13 @@ tile_size = Vector2i(128, 128)
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "bridge 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetAtlasSource_4gj3w")
 
 [node name="WorldGenerator" type="Node2D"]
 script = ExtResource("1_wi4s2")
 noise_height_text = SubResource("NoiseTexture2D_i5f1r")
 rock_noise_value = 0.35
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position_smoothing_enabled = true
-script = ExtResource("2_1cg1e")
-
-[node name="Sprite2D" type="Sprite2D" parent="Camera2D"]
-position = Vector2(253.00005, 190.5)
-scale = Vector2(39.65625, 24.265623)
-texture = ExtResource("3_wi5qt")
 
 [node name="Foam" type="TileMapLayer" parent="."]
 tile_set = ExtResource("3_i5f1r")
@@ -595,7 +608,3 @@ tile_set = ExtResource("2_wi5qt")
 tile_set = ExtResource("5_1cg1e")
 
 [node name="Ground2" type="TileMapLayer" parent="."]
-
-[node name="Enemy_torch" parent="." instance=ExtResource("8_4gj3w")]
-z_index = 1
-z_as_relative = false

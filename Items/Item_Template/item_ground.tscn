@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://b4wgvn5jc1kik"]
+
+[ext_resource type="Script" uid="uid://vpaxg82i3iru" path="res://Items/Item_Template/ground_item.gd" id="1_3vyao"]
+[ext_resource type="Texture2D" uid="uid://b2u34jhfj5lge" path="res://kenney_tiny-dungeon/Tiles/tile_0104.png" id="2_rpxnh"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_75lc8"]
+a = Vector2(0, -8)
+b = Vector2(0, 8)
+
+[node name="Item_ground" type="Area2D"]
+script = ExtResource("1_3vyao")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_rpxnh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("SegmentShape2D_75lc8")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

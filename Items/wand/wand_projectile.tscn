@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://mxgrabr2assu"]
+
+[ext_resource type="Script" uid="uid://b1rq6whpxq2fj" path="res://Items/wand/wand_projectile.gd" id="1_66d0t"]
+[ext_resource type="Texture2D" uid="uid://cd3v233cfpgpl" path="res://kenney_tiny-dungeon/Tiles/tile_0116.png" id="1_u8u28"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_66d0t"]
+radius = 4.0
+height = 12.0
+
+[node name="Wand_Projectile" type="CharacterBody2D"]
+scale = Vector2(4, 4)
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_66d0t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_u8u28")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_66d0t")

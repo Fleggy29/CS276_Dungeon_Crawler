@@ -9,7 +9,6 @@ extends Node2D
 @onready var rocks_layer_2 = $Rocks2
 @onready var ground_layer_2 = $Ground2
 @onready var bridges_layer = $Bridges
-@onready var camera := $Camera2D
 var noise : Noise
 
 const W = 32
@@ -30,8 +29,6 @@ var land_tile = Vector2i(6,1)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var room_rect: Rect2i = Rect2i(Vector2i(0, 0), get_viewport().get_visible_rect().size)
-	$Camera2D.global_position = room_rect.position + room_rect.size / 2
 	noise = noise_height_text.noise
 	#var start_x = 0
 	#var start_y = 0
@@ -43,8 +40,6 @@ func _ready() -> void:
 		generate_room(k.x * W, k.y * H, bridges[i])
 		#start_y += H
 
-func _process(delta: float) -> void:
-	camera.position = $Enemy_torch.global_position
 
 func generate_level(c):
 	var k = [[], [], [], []]

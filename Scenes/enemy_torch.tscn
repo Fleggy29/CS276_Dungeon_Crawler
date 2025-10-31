@@ -263,8 +263,9 @@ size = Vector2(51, 48)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rmtnf"]
 size = Vector2(96, 51)
 
-[node name="Enemy_torch" type="CharacterBody2D"]
+[node name="Enemy_torch" type="CharacterBody2D" node_paths=PackedStringArray("nav")]
 script = ExtResource("1_7cahf")
+nav = NodePath("NavigationAgent2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7cahf")
@@ -279,3 +280,7 @@ shape = SubResource("RectangleShape2D_7cahf")
 [node name="CollisionShapeAttackAside" type="CollisionShape2D" parent="."]
 position = Vector2(26, 8.5)
 shape = SubResource("RectangleShape2D_rmtnf")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+navigation_layers = 3
+debug_enabled = true

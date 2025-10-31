@@ -1,9 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://dr7tipaw41b1g"]
+[gd_scene load_steps=9 format=3 uid="uid://dr7tipaw41b1g"]
 
 [ext_resource type="Script" uid="uid://deejhq53hc2vp" path="res://global.gd" id="1_6q3x5"]
-[ext_resource type="PackedScene" uid="uid://c104xjgmtyff8" path="res://Map.tscn" id="2_qxp0b"]
+[ext_resource type="PackedScene" uid="uid://bv7lanwyp0tfh" path="res://player.tscn" id="3_8tbuy"]
+[ext_resource type="PackedScene" uid="uid://boiml8aju2q4t" path="res://Items/sword/sword_item.tscn" id="4_hhif3"]
+[ext_resource type="PackedScene" uid="uid://dj5600l4wwvch" path="res://Scenes/camera_2d.tscn" id="5_gfa4i"]
+[ext_resource type="PackedScene" uid="uid://d330l7g2hacyd" path="res://Items/wand/wand_item.tscn" id="5_hhif3"]
+[ext_resource type="PackedScene" uid="uid://dw885sf8joqje" path="res://Inventory.tscn" id="6_74nqk"]
+[ext_resource type="PackedScene" uid="uid://ctvexehac65sy" path="res://Scenes/world_generator.tscn" id="7_ol57v"]
+[ext_resource type="PackedScene" uid="uid://26f72w3m8qnc" path="res://Scenes/enemy_torch.tscn" id="8_gfa4i"]
 
 [node name="Global" type="Node"]
 script = ExtResource("1_6q3x5")
 
-[node name="Map" parent="." instance=ExtResource("2_qxp0b")]
+[node name="Camera2D" parent="." instance=ExtResource("5_gfa4i")]
+
+[node name="WorldGenerator" parent="." instance=ExtResource("7_ol57v")]
+
+[node name="Player" parent="." instance=ExtResource("3_8tbuy")]
+position = Vector2(96, 96)
+scale = Vector2(4, 4)
+
+[node name="Enemy_torch" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_gfa4i")]
+z_index = 1
+z_as_relative = false
+player = NodePath("../Player")
+
+[node name="Sword_Item" parent="." instance=ExtResource("4_hhif3")]
+position = Vector2(176, 80)
+scale = Vector2(4, 4)
+
+[node name="Wand_Item" parent="." instance=ExtResource("5_hhif3")]
+position = Vector2(176, 144)
+scale = Vector2(4, 4)
+
+[node name="Inventory" parent="." instance=ExtResource("6_74nqk")]
+z_index = 10
+
+[connection signal="close_inventory" from="Player" to="Inventory" method="_on_player_close_inventory"]
+[connection signal="open_inventory" from="Player" to="Inventory" method="_on_player_open_inventory"]
+[connection signal="ground_item_body_entered" from="Sword_Item" to="Player" method="_on_ground_item_body_entered"]
+[connection signal="ground_item_body_entered" from="Wand_Item" to="Player" method="_on_ground_item_body_entered"]
+[connection signal="playerEquipWeapon" from="Inventory" to="Player" method="equipWeapon"]
+[connection signal="removeItemFromInventory" from="Inventory" to="Player" method="removeItemFromInventory"]

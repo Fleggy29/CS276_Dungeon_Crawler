@@ -1,7 +1,6 @@
-[gd_scene load_steps=5 format=4 uid="uid://c104xjgmtyff8"]
+[gd_scene load_steps=4 format=4 uid="uid://c104xjgmtyff8"]
 
 [ext_resource type="Texture2D" uid="uid://c1st14mgaostn" path="res://kenney_tiny-dungeon/Tilemap/tilemap.png" id="1_gfjgm"]
-[ext_resource type="PackedScene" uid="uid://bv7lanwyp0tfh" path="res://player.tscn" id="2_3vi7k"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3vi7k"]
 texture = ExtResource("1_gfjgm")
@@ -21,6 +20,7 @@ separation = Vector2i(1, 1)
 0:1/0 = 0
 1:1/0 = 0
 2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:1/0 = 0
 4:1/0 = 0
 5:1/0 = 0
@@ -47,6 +47,7 @@ separation = Vector2i(1, 1)
 2:3/0 = 0
 3:3/0 = 0
 4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:3/0 = 0
 6:3/0 = 0
 7:3/0 = 0
@@ -140,15 +141,13 @@ separation = Vector2i(1, 1)
 11:10/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_3h1ab"]
+physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_3vi7k")
 
 [node name="Map" type="Node2D"]
+metadata/_edit_group_ = true
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 scale = Vector2(2, 2)
 tile_map_data = PackedByteArray("AAADAAQAAAADAAQAAAABAAQAAAAEAAQAAGACAAMAAAACAAEAAAACAAQAAAACAAQAAAAEAAQAAAACAAQAAAAEAAMAAAACAAEAAAADAAMAAAACAAEAAAABAAMAAAACAAEAAAABAAIAAAACAAAAAAACAAIAAAACAAAAAAADAAIAAAACAAAAAAAEAAIAAAACAAAAAAAAAAMAAAABAAEAAAAAAAQAAAABAAEAAAAAAAUAAAABAAEAAAAAAAIAAAABAAAAAAABAAUAAAACAAQAAGACAAUAAAABAAQAAAADAAUAAAABAAQAAAAEAAUAAAABAAQAAAA=")
 tile_set = SubResource("TileSet_3h1ab")
-
-[node name="Player" parent="." instance=ExtResource("2_3vi7k")]
-position = Vector2(16, 16)
-scale = Vector2(2, 2)

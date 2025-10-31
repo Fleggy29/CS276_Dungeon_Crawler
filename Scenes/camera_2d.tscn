@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://dj5600l4wwvch"]
+
+[ext_resource type="Script" uid="uid://chhvkww3w6777" path="res://Scripts/camera_2d.gd" id="1_ev1no"]
+[ext_resource type="Texture2D" uid="uid://lhvvou7fj1wo" path="res://NewAssets/Tiny Swords (Update 010)/Terrain/Water/Water.png" id="2_0e4st"]
+
+[node name="Camera2D" type="Camera2D"]
+position_smoothing_enabled = true
+script = ExtResource("1_ev1no")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(42, 25.7)
+texture = ExtResource("2_0e4st")

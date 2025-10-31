@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://brydjsdq1ab0x"]
+
+[ext_resource type="PackedScene" uid="uid://v7mdy5b2qjrq" path="res://Items/sword/sword.tscn" id="1_dml6p"]
+[ext_resource type="Script" uid="uid://x4w3keiagmbl" path="res://Items/wand/wand.gd" id="2_a0r0b"]
+[ext_resource type="Texture2D" uid="uid://2qdsb4b8gkwu" path="res://kenney_tiny-dungeon/Tiles/tile_0130.png" id="3_4xq8v"]
+[ext_resource type="PackedScene" uid="uid://mxgrabr2assu" path="res://Items/wand/wand_projectile.tscn" id="3_if1qk"]
+
+[node name="Wand" instance=ExtResource("1_dml6p")]
+script = ExtResource("2_a0r0b")
+projectile = ExtResource("3_if1qk")
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("3_4xq8v")
+
+[node name="Spawner" type="Node" parent="." index="2"]

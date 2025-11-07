@@ -72,7 +72,7 @@ func generate_level(c):
 			mod = DIRS[coef]
 			res.append(cur + mod)
 			c += 1
-	print(k)
+	#print(k)
 	return [res, k]
 		
 
@@ -185,16 +185,20 @@ func _paint(components: Array, coords_x, coords_y, bridges):
 			#st2 = st2 + dir
 			bridges_cells.append(st1)
 			#bridges_cells.append(st2)
+			
+	for i in hill_cells:
+		ground_cells.remove_at(ground_cells.find(i))
 		
 
 	
 	ground_layer_0.set_cells_terrain_connect(ground_cells, terrain_set, T_GROUND)
-	print(bridges_cells)
+	#print(bridges_cells)
 	bridges_layer.set_cells_terrain_connect(bridges_cells, terrain_set, 0)
 	rocks_layer_1.set_cells_terrain_connect(hill_cells, terrain_set, 0)
 	ground_layer_1.set_cells_terrain_connect(hill_grass_cells, terrain_set, 1)
 	#ground_layer_1.set_cells_terrain_connect(revs(hill_grass_cells), terrain_set, 1)
 	rocks_layer_2.set_cells_terrain_connect(stairs_cells, terrain_set, 2)
+	#print(ground_layer_0.get_navigation_map())
 	#update_bitmask_region(Rect2i(Vector2i.ZERO, Vector2i(W, H)))
 	#print(stairs_cells)
 	#print(hill_cells)

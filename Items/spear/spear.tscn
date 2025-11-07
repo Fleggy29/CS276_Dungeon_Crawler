@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpc5gyedrumf4"]
+
+[ext_resource type="PackedScene" uid="uid://d017i1jie8dgw" path="res://Items/Item_Template/item_holdable.tscn" id="1_m4a0m"]
+[ext_resource type="Script" uid="uid://e7hkma6kina8" path="res://Items/spear/spear.gd" id="2_w1jcn"]
+[ext_resource type="Texture2D" uid="uid://cocub8umblc25" path="res://kenney_tiny-dungeon/Tiles/tile_0131.png" id="3_lhlmb"]
+
+[node name="spear" instance=ExtResource("1_m4a0m")]
+script = ExtResource("2_w1jcn")
+
+[node name="Sprite2D" parent="." index="0"]
+position = Vector2(0, -8)
+scale = Vector2(1, 2)
+texture = ExtResource("3_lhlmb")
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -8)

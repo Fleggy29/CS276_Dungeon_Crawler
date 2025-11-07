@@ -2,9 +2,12 @@ class_name Player extends CharacterBody2D
 
 const TILESIZE = Global.TILESIZE
 const MOVESPEED = 0.25
+var speed = 400
 var tween: Tween
-var lastDir: RayCast2D
+#var lastDir: RayCast2D
+var lastDir: Vector2
 var weapon: Area2D
+var items: Array[GroundItem]
 signal swing_weapon
 signal picked_weapon
 var inventory: Dictionary[Vector2i, String]
@@ -31,23 +34,37 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	velocity = Vector2.ZERO
+	$AnimatedSprite2D.play()
 	if !tween or !tween.is_running() and not inventoryOpened:
-		if Input.is_action_pressed("move_left") and not checkCollisionBool($ColliderChecks/ColliderCheckW, 1):
-			lastDir = $ColliderChecks/ColliderCheckW
-			move(Vector2.LEFT)
-		if Input.is_action_pressed("move_right") and not checkCollisionBool($ColliderChecks/ColliderCheckE, 1):
-			lastDir = $ColliderChecks/ColliderCheckE
-			move(Vector2.RIGHT)
-		if Input.is_action_pressed("move_up") and not checkCollisionBool($ColliderChecks/ColliderCheckN, 1):
-			lastDir = $ColliderChecks/ColliderCheckN
-			move(Vector2.UP)
-		if Input.is_action_pressed("move_down") and not checkCollisionBool($ColliderChecks/ColliderCheckS, 1):
-			lastDir = $ColliderChecks/ColliderCheckS
-			move(Vector2.DOWN)
-		if Input.is_action_pressed("dash") and not checkCollisionBool(lastDir, 2):
-			move(lastDir.target_position.normalized() * 2)
-		elif Input.is_action_pressed("dash") and not checkCollisionBool(lastDir, 1):
-			move(lastDir.target_position.normalized())
+		if Input.is_action_pressed("move_left") :
+		#and not checkCollisionBool($ColliderChecks/ColliderCheckW, 1):
+			#lastDir = $ColliderChecks/ColliderCheckW
+			lastDir = Vector2.LEFT
+			velocity += lastDir
+		if Input.is_action_pressed("move_right") :
+		#and not checkCollisionBool($ColliderChecks/ColliderCheckE, 1):
+			#lastDir = $ColliderChecks/ColliderCheckE
+			lastDir = Vector2.RIGHT
+			velocity += lastDir
+		if Input.is_action_pressed("move_up") :
+		#and not checkCollisionBool($ColliderChecks/ColliderCheckN, 1):
+			#lastDir = $ColliderChecks/ColliderCheckN
+			lastDir = Vector2.UP
+			velocity += lastDir
+		if Input.is_action_pressed("move_down") :
+		#and not checkCollisionBool($ColliderChecks/ColliderCheckS, 1):
+			#lastDir = $ColliderChecks/ColliderCheckS
+			lastDir = Vector2.DOWN
+			velocity += lastDir
+		velocity = velocity.normalized()
+		if Input.is_action_pressed("dash") :
+		#and not checkCollisionBool(lastDir, 2):
+			#move(lastDir.target_position.normalized() * 2)
+			velocity *= 2
+		#elif Input.is_action_pressed("dash") and not checkCollisionBool(lastDir, 1):
+			#move(lastDir.target_position.normalized())
+		velocity *= speed
+		move_and_slide()
 	if Input.is_action_pressed("attack") and weapon and not inventoryOpened:
 			emit_signal("swing_weapon", attackSpeed, projectileNum)
 	if Input.is_action_just_pressed("inventory"):
@@ -57,6 +74,11 @@ func _physics_process(delta: float) -> void:
 		else:
 			emit_signal("close_inventory")
 			inventoryOpened = false
+	if velocity != Vector2.ZERO:
+		$AnimatedSprite2D.flip_h = velocity.x < 0
+		$AnimatedSprite2D.animation = "walk"
+	else:
+		$AnimatedSprite2D.animation = "idle"
 
 
 func checkCollisionBool(ray: RayCast2D, distance: int) -> bool:
@@ -70,6 +92,7 @@ func checkCollisionBool(ray: RayCast2D, distance: int) -> bool:
 func move(dir: Vector2):
 	if tween:
 		tween.kill()
+	$AnimatedSprite2D.animation = "walk"
 	tween = create_tween()
 	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	tween.tween_property(self, "position", position + TILESIZE * dir, MOVESPEED).set_trans(Tween.TRANS_SINE)
@@ -78,6 +101,7 @@ func equipWeapon (weaponName: String) -> void:
 	if weapon:
 		weapon.call_deferred("queue_free")
 	weapon = load("res://Items/%s/%s.tscn" % [weaponName,weaponName]).instantiate()
+	print(weapon)
 	print(weapon.name)
 	var pivot = Node2D.new()
 	pivot.name = "Weapon_Pivot"
@@ -85,6 +109,20 @@ func equipWeapon (weaponName: String) -> void:
 	weapon.rotation = PI/2
 	add_child(pivot)
 	pivot.call_deferred("add_child", weapon)
+	
+func getName(obj: Object):
+	return obj.name
+
+func equipItem (itemName: String) -> void:
+	for item in items:
+		if item.name == itemName:
+			item.call_deferred("remove")
+			items.erase(item)
+	if items.size() < 3:
+		items.append(load("res://Items/%s/%s.tscn" % [itemName,itemName]).instantiate())
+		print(items[-1].name)
+		add_child(items[-1])
+	
 		
 func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 	if inventorySize < inventoryWidth * inventoryHeight:

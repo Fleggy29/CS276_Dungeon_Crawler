@@ -7,7 +7,7 @@
 a = Vector2(0, -8)
 b = Vector2(0, 8)
 
-[node name="Sword_Item" type="Area2D"]
+[node name="Sword_Item" type="Area2D" groups=["weapon"]]
 script = ExtResource("1_wheap")
 metadata/_edit_group_ = true
 

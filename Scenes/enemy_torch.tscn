@@ -269,9 +269,6 @@ nav = NodePath("NavigationAgent2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7cahf")
-animation = &"hit_aside"
-frame = 5
-frame_progress = 1.0
 
 [node name="CollisionShapeDefault" type="CollisionShape2D" parent="."]
 position = Vector2(3.5, 8)
@@ -282,5 +279,5 @@ position = Vector2(26, 8.5)
 shape = SubResource("RectangleShape2D_rmtnf")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-navigation_layers = 3
+navigation_layers = 15
 debug_enabled = true

@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://8uuxetwnthke"]
+
+[ext_resource type="PackedScene" uid="uid://ca0d7yyt7aaxa" path="res://Items/Item_Template/item_buff.tscn" id="1_u67ft"]
+[ext_resource type="Script" uid="uid://yhnn67kb4g3y" path="res://atk_spd_up.gd" id="2_05arr"]
+
+[node name="atkSpdUp" instance=ExtResource("1_u67ft")]
+script = ExtResource("2_05arr")

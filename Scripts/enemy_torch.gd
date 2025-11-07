@@ -23,7 +23,7 @@ func _physics_process(delta: float) -> void:
 		#start_attack()
 	nav.target_position = player.global_position
 	var next = nav.get_next_path_position();
-	print(next)
+	#print(next)
 	velocity = global_position.direction_to(next) * speed;
 
 	if velocity != Vector2.ZERO:

@@ -3,6 +3,7 @@ extends Node2D
 const TILESIZE = Global.TILESIZE
 var inventory: Dictionary[Vector2i, String]
 signal playerEquipWeapon
+signal playerEquipItem
 signal removeItemFromInventory
 
 func _ready() -> void:
@@ -13,9 +14,15 @@ func _process(delta: float) -> void:
 		if $Cursor.has_overlapping_areas():
 			for area in $Cursor.get_overlapping_areas():
 				var name = area.name.split("_")[0].to_lower()
+				print(name)
 				if area is GroundItem and ResourceLoader.exists("res://Items/%s/%s_item.tscn" % [name,name]):
-					var selectedWeapon = area
-					emit_signal("playerEquipWeapon", name)
+					
+					if area.is_in_group("weapon"):
+						var selectedWeapon = area
+						print("check")
+						emit_signal("playerEquipWeapon", name)
+					else:
+						emit_signal("playerEquipItem", name)
 	if Input.is_action_just_pressed("drop"):
 		if $Cursor.has_overlapping_areas():
 			for area in $Cursor.get_overlapping_areas():

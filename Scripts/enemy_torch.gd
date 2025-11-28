@@ -11,6 +11,7 @@ var is_attacking = false
 var current_goal = Vector2i.ZERO
 var chasing = false
 var returning = false
+var retreating = false
 var cooling_down = false
 var disabled_attack = false
 var player_attackable = false
@@ -39,6 +40,7 @@ func _physics_process(delta: float) -> void:
 			nav.target_position = start_area
 			returning = true
 			chasing = false
+			player.enemies_following.remove_at(player.enemies_following.find(self))
 	elif not returning:
 		if abs(position.x - current_goal.x) < 32 and abs(position.y - current_goal.y) < 32:
 			patrool()
@@ -84,43 +86,57 @@ func start_attack():
 	is_attacking = false
 	retreat()
 	
-func retreat():
-	var local = world.get_map_position(position)
-	var diff = nav.get_next_path_position() - position
-	var vect = Vector2i.ZERO
-	if -20 < diff.x and diff.x < 20:
-		pass
-	elif diff.x < 0:
-		vect.x = -1
-	else:
-		vect.x = 1 
-	if -20 < diff.y and diff.y < 20:
-		pass
-	elif diff.y < 0:
-		vect.y = -1
-	else:
-		vect.y = 1 
-	var new_pos = local - vect * 2
-	new_pos.x *= 64
-	new_pos.y *= 64
-	nav.target_position = new_pos
-	cool_down()
+func retreat(dist=100, swing=false):
+	if nav.distance_to_target() < dist and not retreating:
+		retreating = true
+		var local = world.get_map_position(position)
+		var diff = nav.get_next_path_position() - position
+		var vect = Vector2i.ZERO
+		if -20 < diff.x and diff.x < 20:
+			pass
+		elif diff.x < 0:
+			vect.x = -1
+		else:
+			vect.x = 1 
+		if -20 < diff.y and diff.y < 20:
+			pass
+		elif diff.y < 0:
+			vect.y = -1
+		else:
+			vect.y = 1 
+		var dist_to_run = randf_range(1.5, 3)
+		var new_pos = Vector2(local) - vect * dist_to_run
+		new_pos.x *= 64
+		new_pos.y *= 64
+		nav.target_position = new_pos
+		cool_down(swing)
 
 
-func cool_down():
+func cool_down(swing):
 	cooling_down = true
 	speed = 300
 	disabled_attack = true
-	await get_tree().create_timer(1.0).timeout
+	var time = 0.8
+	if swing:
+		time = 0.3
+	await get_tree().create_timer(time).timeout
 	disabled_attack = false
 	if player_attackable:
 		start_attack()
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(time).timeout
 	speed = 150
 	cooling_down = false
+	retreating = false
+	
+	
+func attacked():
+	pass
+	
 
 func _on_area_2d_body_entered(body) -> void:
 	if body == player:
+		if not chasing:
+			player.enemies_following.append(self)
 		chasing = true
 		nav.target_position = player.global_position
 

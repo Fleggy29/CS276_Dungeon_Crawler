@@ -2,6 +2,8 @@ extends Item_holdable
 
 func swing(atkSpd:int, projNum:int):
 	show()
+	for i in Global.player.enemies_following:
+		i.retreat(200, true)
 	if !tween or !tween.is_running():
 		pivot.rotation -= PI/4
 		tween = create_tween()

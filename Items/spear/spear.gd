@@ -1,5 +1,4 @@
 extends Item_holdable
-
 #func swing(atkSpd:int, projNum:int):
 	#show()
 	#if !tween or !tween.is_running():
@@ -10,6 +9,8 @@ extends Item_holdable
 
 func swing(atkSpd:int, projNum:int):
 	show()
+	for i in Global.player.enemies_following:
+		i.retreat(350, true)
 	if !tween or !tween.is_running():
 		reset = true;
 		tween = create_tween()

@@ -18,12 +18,12 @@ script = ExtResource("1_6q3x5")
 [node name="WorldGenerator" parent="." instance=ExtResource("7_ol57v")]
 
 [node name="Player" parent="." instance=ExtResource("3_8tbuy")]
+z_index = 1
 position = Vector2(96, 96)
 scale = Vector2(4, 4)
 
 [node name="Enemy_torch" parent="." node_paths=PackedStringArray("player") instance=ExtResource("8_gfa4i")]
 z_index = 1
-z_as_relative = false
 player = NodePath("../Player")
 
 [node name="Sword_Item" parent="." instance=ExtResource("4_hhif3")]
@@ -34,7 +34,7 @@ scale = Vector2(2, 2)
 position = Vector2(176, 144)
 scale = Vector2(2, 2)
 
-[node name="spear_item" parent="." groups=["weapon"] instance=ExtResource("9_snwe2")]
+[node name="spear_item" parent="." instance=ExtResource("9_snwe2")]
 position = Vector2(176, 16)
 scale = Vector2(2, 2)
 

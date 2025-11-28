@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://uqm627gojo46"]
+
+[ext_resource type="PackedScene" uid="uid://b4wgvn5jc1kik" path="res://Items/Item_Template/item_ground.tscn" id="1_r4wwo"]
+[ext_resource type="Texture2D" uid="uid://bdscp530ec5iu" path="res://Kenneys/kenney_tiny-dungeon/Tiles/tile_0125.png" id="2_wou1f"]
+
+[node name="atkSpd_item" instance=ExtResource("1_r4wwo")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_wou1f")

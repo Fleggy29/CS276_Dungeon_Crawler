@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://b2u34jhfj5lge" path="res://kenney_tiny-dungeon/Tiles/tile_0104.png" id="2_81t41"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_e4ynd"]
-a = Vector2(0, -8)
-b = Vector2(0, 8)
+a = Vector2(0, -14)
+b = Vector2(0, 15)
 
 [node name="Item_holdable" type="Area2D"]
 script = ExtResource("1_3pxxl")
@@ -16,3 +16,5 @@ texture = ExtResource("2_81t41")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("SegmentShape2D_e4ynd")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

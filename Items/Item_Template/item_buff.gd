@@ -1,11 +1,12 @@
 class_name item_buff extends Node
 
 var STAT: String = ""
-var p = get_parent()
+@onready var p = get_parent()
 
-func _ready() -> void:
+func add():
 	STAT = setStat()
 	p.set(STAT, p.get(STAT) + 1)
+	#print("setting ", STAT, " to ", p.get(STAT))
 	
 
 func setStat():
@@ -13,4 +14,5 @@ func setStat():
 
 func remove():
 	p.set(STAT, p.get(STAT) - 1)
+	#print("setting ", STAT, " to ", p.get(STAT))
 	queue_free()

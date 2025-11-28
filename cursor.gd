@@ -5,7 +5,7 @@ const MOVESPEED = 0.25
 var tween: Tween
 
 func _process(delta: float) -> void:
-	if !tween or !tween.is_running():
+	if (!tween or !tween.is_running()) and is_visible_in_tree():
 		if Input.is_action_pressed("move_left") and position.x > 112+16:
 			move(Vector2.LEFT)
 		if Input.is_action_pressed("move_right") and position.x < 636-16:

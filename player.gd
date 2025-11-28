@@ -7,7 +7,7 @@ var tween: Tween
 #var lastDir: RayCast2D
 var lastDir: Vector2
 var weapon: Area2D
-var items: Array[GroundItem]
+var items: Array[item_buff]
 signal swing_weapon
 signal picked_weapon
 var inventory: Dictionary[Vector2i, String]
@@ -18,7 +18,7 @@ const inventoryHeight = 4
 var HPmax: int = 3
 var currentHP: int = HPmax
 var attackSpeed: int = 1
-var projectileNum: int = 3
+var projectileNum: int = 0
 
 signal open_inventory
 signal close_inventory
@@ -33,9 +33,10 @@ func _ready() -> void:
 	
 
 func _physics_process(delta: float) -> void:
+	#print(attackSpeed)
 	velocity = Vector2.ZERO
 	$AnimatedSprite2D.play()
-	if !tween or !tween.is_running() and not inventoryOpened:
+	if (!tween or !tween.is_running()) and not inventoryOpened:
 		if Input.is_action_pressed("move_left") :
 		#and not checkCollisionBool($ColliderChecks/ColliderCheckW, 1):
 			#lastDir = $ColliderChecks/ColliderCheckW
@@ -115,13 +116,21 @@ func getName(obj: Object):
 
 func equipItem (itemName: String) -> void:
 	for item in items:
+		print(item)
 		if item.name == itemName:
 			item.call_deferred("remove")
 			items.erase(item)
 	if items.size() < 3:
-		items.append(load("res://Items/%s/%s.tscn" % [itemName,itemName]).instantiate())
-		print(items[-1].name)
-		add_child(items[-1])
+		var i = load("res://Items/%s/%s.tscn" % [itemName,itemName]).instantiate()
+		
+		
+		print("name:", i.name)
+		add_child(i)
+		items.append(i)
+		print(items)
+		print("item:", i)
+		i.add()
+		print(attackSpeed)
 	
 		
 func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
@@ -129,7 +138,7 @@ func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 		var emitterName = emitter.name.split("_")[0].to_lower()
 		print(emitterName)
 		#var item = load("res://Items/%s/%s.tscn" % [emitterName,emitterName]).instantiate()
-		inventory[Vector2i(inventorySize % 9, inventorySize / 4)] = emitterName
+		inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
 		inventorySize += 1
 		print(inventory)
 		emitter.call_deferred("queue_free")

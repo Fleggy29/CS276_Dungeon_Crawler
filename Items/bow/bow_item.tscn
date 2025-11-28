@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://cepmuf38ny2qh"]
+
+[ext_resource type="PackedScene" uid="uid://b4wgvn5jc1kik" path="res://Items/Item_Template/item_ground.tscn" id="1_lgjxg"]
+[ext_resource type="Texture2D" uid="uid://bxlxmd2l6radk" path="res://kenney_tiny-town/Tiles/tile_0118.png" id="2_tkhc7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4mguv"]
+size = Vector2(10, 14)
+
+[node name="bow_item" groups=["weapon"] instance=ExtResource("1_lgjxg")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_tkhc7")
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource("RectangleShape2D_4mguv")

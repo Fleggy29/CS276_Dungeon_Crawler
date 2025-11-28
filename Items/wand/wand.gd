@@ -5,10 +5,11 @@ extends Item_holdable
 func swing(atkSpd:int, projNum:int):
 	show()
 	if !tween or !tween.is_running():
-		for i in range(0,projNum):
+		for i in range(0,3+projNum):
 			var p = projectile.instantiate()
 			p.name = "projectile" + str(i)
-			p.rotation = pivot.rotation - PI/2 + (PI/(2*(projNum+1)) * (i+1) - PI/4 )
+			p.speed = 400
+			p.rotation = pivot.rotation - PI/2 + (PI/(2*(3+projNum+1)) * (i+1) - PI/4)
 			p.position = global_position
 			
 			$Spawner.add_child(p)

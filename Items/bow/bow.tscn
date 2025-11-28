@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://tep11y4yjper"]
+
+[ext_resource type="PackedScene" uid="uid://d017i1jie8dgw" path="res://Items/Item_Template/item_holdable.tscn" id="1_aeack"]
+[ext_resource type="Script" uid="uid://d3ak3t73urdum" path="res://Items/bow/bow.gd" id="2_6j2va"]
+[ext_resource type="PackedScene" uid="uid://bcvtp1f7s775q" path="res://Items/bow/bow_projectile.tscn" id="3_lkx30"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6j2va"]
+size = Vector2(10, 14)
+
+[node name="bow" instance=ExtResource("1_aeack")]
+script = ExtResource("2_6j2va")
+projectile = ExtResource("3_lkx30")
+
+[node name="Sprite2D" parent="." index="0"]
+rotation = -1.5707964
+texture = null
+
+[node name="CollisionShape2D" parent="." index="1"]
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_6j2va")
+
+[node name="Spawner" type="Node" parent="." index="2"]

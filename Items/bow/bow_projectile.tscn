@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bcvtp1f7s775q"]
+
+[ext_resource type="PackedScene" uid="uid://mxgrabr2assu" path="res://Items/wand/wand_projectile.tscn" id="1_hag1r"]
+[ext_resource type="Texture2D" uid="uid://cap7whs71e1hv" path="res://kenney_tiny-town/Tiles/tile_0119.png" id="2_aelnq"]
+
+[node name="Bow_Projectile" instance=ExtResource("1_hag1r")]
+
+[node name="Sprite2D" parent="." index="0"]
+rotation = 2.3561945
+texture = ExtResource("2_aelnq")

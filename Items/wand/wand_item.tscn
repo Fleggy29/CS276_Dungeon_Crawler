@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://boiml8aju2q4t" path="res://Items/sword/sword_item.tscn" id="1_3qyqb"]
 [ext_resource type="Texture2D" uid="uid://2qdsb4b8gkwu" path="res://kenney_tiny-dungeon/Tiles/tile_0130.png" id="2_tydi8"]
 
-[node name="Wand_Item" groups=["weapon"] instance=ExtResource("1_3qyqb")]
+[node name="Wand_Item" instance=ExtResource("1_3qyqb")]
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_tydi8")

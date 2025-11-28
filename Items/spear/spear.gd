@@ -6,7 +6,7 @@ extends Item_holdable
 		#pivot.rotation -= PI/4
 		#tween = create_tween()
 		#tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
-		#tween.tween_property(pivot, "rotation", pivot.rotation + PI/2, float(atkSpd)/4).set_trans(Tween.TRANS_QUAD)
+		#tween.tween_property(pivot, "rotation", pivot.rotation + PI/2, 1/(4*atkSpd)).set_trans(Tween.TRANS_QUAD)
 
 func swing(atkSpd:int, projNum:int):
 	show()
@@ -14,4 +14,4 @@ func swing(atkSpd:int, projNum:int):
 		reset = true;
 		tween = create_tween()
 		tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
-		tween.tween_property(pivot, "position", pivot.position + (get_global_mouse_position()-Global.player.global_position).normalized()*5, 0.10).set_trans(Tween.TRANS_LINEAR)
+		tween.tween_property(pivot, "position", pivot.position + (get_global_mouse_position()-Global.player.global_position).normalized()*5, 1/(10*float(atkSpd))).set_trans(Tween.TRANS_LINEAR)

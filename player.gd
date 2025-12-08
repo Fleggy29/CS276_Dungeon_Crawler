@@ -20,6 +20,8 @@ var currentHP: int = HPmax
 var attackSpeed: int = 1
 var projectileNum: int = 0
 
+var enemies_following: Array[CharacterBody2D]
+
 signal open_inventory
 signal close_inventory
 var inventoryOpened: bool
@@ -118,8 +120,8 @@ func equipWeapon (weaponName: String) -> void:
 	if weapon:
 		weapon.call_deferred("queue_free")
 	weapon = load("res://Items/%s/%s.tscn" % [weaponName,weaponName]).instantiate()
-	print(weapon)
-	print(weapon.name)
+	#print(weapon)
+	#print(weapon.name)
 	var pivot = Node2D.new()
 	pivot.name = "Weapon_Pivot"
 	weapon.position = Vector2(8,0)
@@ -134,7 +136,7 @@ func equipItem (itemName: String) -> void:
 	emit_signal("close_inventory")
 	inventoryOpened = false
 	for item in items:
-		print(item)
+		#print(item)
 		if item.name == itemName:
 			item.call_deferred("remove")
 			items.erase(item)
@@ -142,13 +144,13 @@ func equipItem (itemName: String) -> void:
 		var i = load("res://Items/%s/%s.tscn" % [itemName,itemName]).instantiate()
 		
 		
-		print("name:", i.name)
+		#print("name:", i.name)
 		add_child(i)
 		items.append(i)
-		print(items)
-		print("item:", i)
+		#print(items)
+		#print("item:", i)
 		i.add()
-		print(attackSpeed)
+		#print(attackSpeed)
 	
 		
 func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:

@@ -24,13 +24,27 @@ signal open_inventory
 signal close_inventory
 var inventoryOpened: bool
 
+var highlightCol = Color(255,255,255,0)
+
 
 func _on_enter_tree():
 	Global.player = self
 	
 func _ready() -> void:
 	Global.player = self
-	
+	updateHighlightColour()
+
+
+func updateHighlightColour():
+	var config = ConfigFile.new()
+	var err = config.load("res://SaveData/settings.config")
+
+	if err != OK:
+		return
+
+	highlightCol = config.get_value("Highlight", "player", highlightCol)
+	$Highlight.color = highlightCol
+
 
 func _physics_process(delta: float) -> void:
 	#print(attackSpeed)
@@ -99,6 +113,8 @@ func move(dir: Vector2):
 	tween.tween_property(self, "position", position + TILESIZE * dir, MOVESPEED).set_trans(Tween.TRANS_SINE)
 
 func equipWeapon (weaponName: String) -> void:
+	emit_signal("close_inventory")
+	inventoryOpened = false
 	if weapon:
 		weapon.call_deferred("queue_free")
 	weapon = load("res://Items/%s/%s.tscn" % [weaponName,weaponName]).instantiate()
@@ -115,6 +131,8 @@ func getName(obj: Object):
 	return obj.name
 
 func equipItem (itemName: String) -> void:
+	emit_signal("close_inventory")
+	inventoryOpened = false
 	for item in items:
 		print(item)
 		if item.name == itemName:

@@ -14,15 +14,15 @@ func _process(delta: float) -> void:
 		if $Cursor.has_overlapping_areas():
 			for area in $Cursor.get_overlapping_areas():
 				var name = area.name.split("_")[0].to_lower()
-				#print("area name:", name)
+				print("area name:", name)
 				if area is GroundItem and ResourceLoader.exists("res://Items/%s/%s_item.tscn" % [name,name]):
-					#print("area:", area)
+					print("area:", area)
 					if area.is_in_group("weapon"):
 						var selectedWeapon = area
-						#print("check")
+						print("check")
 						emit_signal("playerEquipWeapon", name)
 					else:
-						#print("equipping item")
+						print("equipping item")
 						emit_signal("playerEquipItem", name)
 	if Input.is_action_just_pressed("drop"):
 		if $Cursor.has_overlapping_areas():

@@ -1,20 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://boiml8aju2q4t"]
+[gd_scene load_steps=2 format=3 uid="uid://boiml8aju2q4t"]
 
-[ext_resource type="Texture2D" uid="uid://b2u34jhfj5lge" path="res://kenney_tiny-dungeon/Tiles/tile_0104.png" id="1_7glw2"]
-[ext_resource type="Script" uid="uid://vpaxg82i3iru" path="res://Items/Item_Template/ground_item.gd" id="1_wheap"]
+[ext_resource type="PackedScene" uid="uid://b4wgvn5jc1kik" path="res://Items/Item_Template/item_ground.tscn" id="1_b7p7g"]
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_75lc8"]
-a = Vector2(0, -8)
-b = Vector2(0, 8)
-
-[node name="Sword_Item" type="Area2D" groups=["weapon"]]
-script = ExtResource("1_wheap")
-metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_7glw2")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("SegmentShape2D_75lc8")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[node name="sword_item" groups=["weapon"] instance=ExtResource("1_b7p7g")]

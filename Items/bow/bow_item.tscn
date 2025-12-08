@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cepmuf38ny2qh"]
 
 [ext_resource type="PackedScene" uid="uid://b4wgvn5jc1kik" path="res://Items/Item_Template/item_ground.tscn" id="1_lgjxg"]
-[ext_resource type="Texture2D" uid="uid://bxlxmd2l6radk" path="res://kenney_tiny-town/Tiles/tile_0118.png" id="2_tkhc7"]
+[ext_resource type="Texture2D" uid="uid://bxlxmd2l6radk" path="res://Kenneys/kenney_tiny-town/Tiles/tile_0118.png" id="2_tkhc7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4mguv"]
 size = Vector2(10, 14)

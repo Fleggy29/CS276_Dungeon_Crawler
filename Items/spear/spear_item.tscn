@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://chllirxj3avs3"]
 
 [ext_resource type="PackedScene" uid="uid://b4wgvn5jc1kik" path="res://Items/Item_Template/item_ground.tscn" id="1_a5g68"]
-[ext_resource type="Texture2D" uid="uid://cocub8umblc25" path="res://kenney_tiny-dungeon/Tiles/tile_0131.png" id="2_46i1x"]
+[ext_resource type="Texture2D" uid="uid://cocub8umblc25" path="res://Kenneys/kenney_tiny-dungeon/Tiles/tile_0131.png" id="2_46i1x"]
 
 [node name="spear_item" groups=["weapon"] instance=ExtResource("1_a5g68")]
 
@@ -10,5 +10,5 @@ position = Vector2(0, -8)
 scale = Vector2(1, 2)
 texture = ExtResource("2_46i1x")
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="1" groups=["weapon"]]
 position = Vector2(0, -8)

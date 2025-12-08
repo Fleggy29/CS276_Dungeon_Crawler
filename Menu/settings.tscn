@@ -1,10 +1,17 @@
-[gd_scene load_steps=6 format=4 uid="uid://j3o6fm4cwre0"]
+[gd_scene load_steps=9 format=4 uid="uid://j3o6fm4cwre0"]
 
 [ext_resource type="Script" uid="uid://ltqixte2x6m2" path="res://Menu/settings.gd" id="1_iesh6"]
 [ext_resource type="Texture2D" uid="uid://ewchotfxw5sk" path="res://NewAssets/Tiny Swords (Free Pack)/Terrain/Water Background color.png" id="1_omxsy"]
 [ext_resource type="TileSet" uid="uid://bpf6f6qouayim" path="res://Scenes/Foam.tres" id="2_emm1k"]
 [ext_resource type="TileSet" uid="uid://vvhkbecwew3d" path="res://Scenes/Ground.tres" id="3_iesh6"]
 [ext_resource type="PackedScene" uid="uid://r04t35o2g5x4" path="res://Menu/button.tscn" id="4_emm1k"]
+[ext_resource type="PackedScene" uid="uid://bduhep87h0bwq" path="res://Menu/label.tscn" id="6_bcfwt"]
+
+[sub_resource type="Gradient" id="Gradient_bcfwt"]
+colors = PackedColorArray(0, 0, 0, 0.39215687, 0, 0, 0, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wk16h"]
+gradient = SubResource("Gradient_bcfwt")
 
 [node name="Settings" type="Node2D"]
 script = ExtResource("1_iesh6")
@@ -28,4 +35,64 @@ tile_set = ExtResource("3_iesh6")
 position = Vector2(784, 896)
 text = "RETURN"
 
+[node name="HighlightCharLabel" parent="." instance=ExtResource("6_bcfwt")]
+position = Vector2(284, 256)
+text = "HIGHLIGHT CHARACTERS"
+fontSize = 40
+
+[node name="PlayerHighlight" parent="." instance=ExtResource("4_emm1k")]
+position = Vector2(924, 256)
+text = "Player"
+
+[node name="EnemyHighlight" parent="." instance=ExtResource("4_emm1k")]
+position = Vector2(1464, 256)
+text = "Enemy"
+
+[node name="HighlightItemLabel" parent="." instance=ExtResource("6_bcfwt")]
+position = Vector2(284, 416)
+text = "HIGHLIGHT ITEMS"
+fontSize = 40
+
+[node name="ItemHighlight" parent="." instance=ExtResource("4_emm1k")]
+position = Vector2(1184, 416)
+text = "Item"
+
+[node name="Colour" type="Node2D" parent="."]
+process_mode = 3
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="Colour"]
+offset_right = 2048.0
+offset_bottom = 1152.0
+texture = SubResource("GradientTexture1D_wk16h")
+
+[node name="ColorPicker" type="ColorPicker" parent="Colour"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 854.0
+offset_top = 284.0
+offset_right = 1154.0
+offset_bottom = 828.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Confirm Colour" parent="Colour" instance=ExtResource("4_emm1k")]
+position = Vector2(1264, 496)
+scale = Vector2(0.5, 0.5)
+text = "Confirm"
+
+[node name="Clear Colour" parent="Colour" instance=ExtResource("4_emm1k")]
+position = Vector2(1264, 576)
+scale = Vector2(0.5, 0.5)
+text = "Clear"
+
 [connection signal="buttonPress" from="Return" to="." method="_on_return_button_press"]
+[connection signal="buttonPress" from="PlayerHighlight" to="." method="_on_player_highlight_button_press"]
+[connection signal="buttonPress" from="EnemyHighlight" to="." method="_on_enemy_highlight_button_press"]
+[connection signal="buttonPress" from="ItemHighlight" to="." method="_on_item_highlight_button_press"]
+[connection signal="color_changed" from="Colour/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="buttonPress" from="Colour/Confirm Colour" to="." method="_on_confirm_colour_button_press"]
+[connection signal="buttonPress" from="Colour/Clear Colour" to="." method="_on_clear_colour_button_press"]

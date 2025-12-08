@@ -19,6 +19,17 @@ var patrool_area
 var start_area
 var PATROOL_AREA_SIZE = Vector2i(200, 200)
 
+var highlightCol = Color(255,255,255,0)
+
+func updateHighlightColour():
+	var config = ConfigFile.new()
+	var err = config.load("res://SaveData/settings.config")
+
+	if err != OK:
+		return
+
+	highlightCol = config.get_value("Highlight", "enemy", highlightCol)
+	$Highlight.color = highlightCol
 
 func _ready() -> void:
 	var room_rect: Rect2i = Rect2i(Vector2i(0, 0), get_viewport().get_visible_rect().size)
@@ -26,6 +37,7 @@ func _ready() -> void:
 	start_area = room_rect.position + room_rect.size / 2
 	patrool_area = Rect2i(start_area - PATROOL_AREA_SIZE, PATROOL_AREA_SIZE)
 	patrool()
+	updateHighlightColour()
 
 
 func _physics_process(delta: float) -> void:

@@ -20,10 +20,15 @@ config/icon="res://icon.svg"
 window/size/viewport_width=2048
 window/size/viewport_height=1152
 window/stretch/mode="viewport"
+window/vsync/vsync_mode=0
 
 [global_group]
 
 weapon=""
+
+[gui]
+
+theme/custom_font="uid://b4rwowyi54ngx"
 
 [input]
 

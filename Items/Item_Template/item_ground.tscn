@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b4wgvn5jc1kik"]
 
 [ext_resource type="Script" uid="uid://vpaxg82i3iru" path="res://Items/Item_Template/ground_item.gd" id="1_3vyao"]
-[ext_resource type="Texture2D" uid="uid://b2u34jhfj5lge" path="res://kenney_tiny-dungeon/Tiles/tile_0104.png" id="2_rpxnh"]
+[ext_resource type="Texture2D" uid="uid://b2u34jhfj5lge" path="res://Kenneys/kenney_tiny-dungeon/Tiles/tile_0104.png" id="2_rpxnh"]
 
 [sub_resource type="SegmentShape2D" id="SegmentShape2D_75lc8"]
 a = Vector2(0, -8)
@@ -16,5 +16,19 @@ texture = ExtResource("2_rpxnh")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("SegmentShape2D_75lc8")
+
+[node name="Highlight" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

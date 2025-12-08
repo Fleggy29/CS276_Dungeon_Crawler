@@ -5,12 +5,19 @@ const TILESIZE = 64
 @onready var camera := $Camera2D
 @onready var inv := $Inventory
 
+var config = ConfigFile.new()
+
 func _ready() -> void:
 	var room_rect: Rect2i = Rect2i(Vector2i(0, 0), get_viewport().get_visible_rect().size)
 	$Camera2D.global_position = room_rect.position + room_rect.size / 2
 
 func _process(delta: float) -> void:
 	if Input.is_key_label_pressed(KEY_ESCAPE):
-		get_tree().quit()
-	camera.position = $Player.global_position
-	inv.position = camera.position - get_viewport().get_visible_rect().size/2
+		var packedScene = PackedScene.new()
+		config.set_value("SaveState", "scene", packedScene.pack(self))
+		config.save("res://SaveData/settings.config")
+		get_tree().change_scene_to_file("res://Menu/main_menu.tscn")
+		#get_tree().quit()
+	else:
+		camera.position = $Player.global_position
+		inv.position = camera.position - get_viewport().get_visible_rect().size/2

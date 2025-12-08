@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=4 uid="uid://dw885sf8joqje"]
+[gd_scene load_steps=8 format=4 uid="uid://dw885sf8joqje"]
 
 [ext_resource type="Script" uid="uid://de6dv6jwrnn7b" path="res://inventory.gd" id="1_3xuxb"]
 [ext_resource type="Texture2D" uid="uid://unr8pws04rfj" path="res://Kenneys/kenney_tiny-dungeon/Tilemap/tilemap_packed.png" id="1_nwt7c"]
 [ext_resource type="Texture2D" uid="uid://ck1lxn26fm14e" path="res://Kenneys/kenney_tiny-dungeon/Tiles/tile_0060.png" id="2_jqulp"]
 [ext_resource type="Script" uid="uid://b1dvjk68wmdff" path="res://cursor.gd" id="3_3xuxb"]
-[ext_resource type="FontFile" uid="uid://c2xcui6yc58ys" path="res://Kenneys/kenney_tiny-dungeon/Pixelify_Sans/static/PixelifySans-Regular.ttf" id="4_jqulp"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_arhjh"]
 texture = ExtResource("1_nwt7c")
@@ -183,8 +182,8 @@ anchor_right = 17.5
 anchor_bottom = 1.5
 offset_left = 100.0
 offset_right = -100.0
-theme_override_fonts/font = ExtResource("4_jqulp")
-theme_override_font_sizes/font_size = 48
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
 text = "Inventory"
 horizontal_alignment = 1
 vertical_alignment = 1

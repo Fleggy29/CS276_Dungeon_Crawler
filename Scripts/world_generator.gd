@@ -8,6 +8,7 @@ extends Node2D
 @onready var ground_layer_1 = $Ground1
 @onready var bridges_layer = $Bridges
 @onready var player = $"../Player"
+@onready var enemies_generator = $"../EnemiesGenerator"
 var player_position_on_floor = true
 var passing_ladder = false
 var noise : Noise
@@ -27,17 +28,21 @@ const DIRS := [Vector2i(0, 1), Vector2i(-1,0), Vector2i(0, -1), Vector2i(1, 0)]
 var source_id = 2
 var grass_tile = Vector2i(1,1)
 var land_tile = Vector2i(6,1)
+var lvl
+var spawn_enemies_room_data = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	player.global_position += Vector2(200, 200)
 	noise = noise_height_text.noise
 	var lvl_data = generate_level(randi_range(1, 3))
-	var lvl = lvl_data[0]
+	lvl = lvl_data[0]
 	var bridges = lvl_data[1]
 	for i in range(len(lvl)):
 		var k = lvl[i]
-		generate_room(k.x * W, k.y * H, bridges[i])
+		generate_room(k.x * W, k.y * H, bridges[i], i)
+	#print(player, 1)
+	enemies_generator.set_lvl(lvl)
 		
 		
 func _process(delta: float) -> void:
@@ -73,7 +78,7 @@ func generate_level(c):
 	return [res, k]
 		
 
-func generate_room(coords_x, coords_y, bridges):
+func generate_room(coords_x, coords_y, bridges, lvl_number):
 	var threshold := 0.05
 	var kept_comps: Array = []
 	for _attempt in range(24):
@@ -101,14 +106,14 @@ func generate_room(coords_x, coords_y, bridges):
 			kept_comps.append(comp)
 		var n := kept_comps.size()
 		if n >= 2 and n <= 4:
-			_paint(kept_comps, coords_x, coords_y, bridges)
+			_paint(kept_comps, coords_x, coords_y, bridges, lvl_number)
 			return
 		if n > 4: threshold += 0.03
 		else:     threshold -= 0.03
-	_paint(kept_comps, coords_x, coords_y, bridges)
+	_paint(kept_comps, coords_x, coords_y, bridges, lvl_number)
 
 	
-func _paint(components: Array, coords_x, coords_y, bridges):
+func _paint(components: Array, coords_x, coords_y, bridges, lvl_number):
 	var hill_cells: Array[Vector2i] = []
 	var hill_grass_cells: Array[Vector2i] = []
 	var stairs_cells: Array[Vector2i] = []
@@ -167,7 +172,12 @@ func _paint(components: Array, coords_x, coords_y, bridges):
 	bridges_layer.set_cells_terrain_connect(bridges_cells, terrain_set, 0)
 	rocks_layer_1.set_cells_terrain_connect(hill_cells, terrain_set, 0)
 	ground_layer_1.set_cells_terrain_connect(hill_grass_cells, terrain_set, 1)
+	spawn_enemies_room_data.append([coords_x + MARGIN_W, coords_y + MARGIN_H, W - MARGIN_W * 2, H - MARGIN_H * 2, float(lvl_number) / float(len(lvl) - 1), hill_cells, hill_grass_cells])
 	
+func spawn():
+	for i in spawn_enemies_room_data:
+		#print(i[0], "a", i[1], "a", i[2], "a", i[3])
+		enemies_generator.spawn_enemies_room(i[0], i[1], i[2], i[3], i[4], i[5], i[6])
 	
 func _components(s: Dictionary, start_x, start_y) -> Array:
 	var rect := Rect2i(Vector2i(start_x, start_y), Vector2i(W, H))

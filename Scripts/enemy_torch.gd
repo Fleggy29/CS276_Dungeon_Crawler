@@ -2,11 +2,13 @@ class_name Enemy
 extends CharacterBody2D
 
 @onready var anim = $AnimatedSprite2D
-@onready var world = $"../WorldGenerator"
+#@onready var world = $"../WorldGenerator"
 #@onready var attack_hitbox = $CollisionShapeAttackAside
 @onready var detection_area = $"Detection Area"
-@export var player: Player
-@export var nav: NavigationAgent2D
+#@onready var player = $"../Player"
+var player
+var world
+@onready var nav = $"NavigationAgent2D"
 var is_attacking = false
 var current_goal = Vector2i.ZERO
 var chasing = false
@@ -16,9 +18,14 @@ var cooling_down = false
 var disabled_attack = false
 var player_attackable = false
 var speed = 150
-var patrool_area
-var start_area
+var health = 300
+var attack = 100
+var room_rect: Rect2i = Rect2i(Vector2i(0, 0), Vector2(1600, 1200))
+var start_area = room_rect.position + room_rect.size / 2
 var PATROOL_AREA_SIZE = Vector2i(200, 200)
+var patrool_area = Rect2i(start_area - PATROOL_AREA_SIZE, PATROOL_AREA_SIZE)
+var sizer
+var id = -1
 
 var highlightCol = Color(255,255,255,0)
 
@@ -32,14 +39,19 @@ func updateHighlightColour():
 	highlightCol = config.get_value("Highlight", "enemy", highlightCol)
 	$Highlight.color = highlightCol
 
-func _ready() -> void:
-	var room_rect: Rect2i = Rect2i(Vector2i(0, 0), get_viewport().get_visible_rect().size)
-	position = room_rect.position + room_rect.size / 2
-	start_area = room_rect.position + room_rect.size / 2
-	patrool_area = Rect2i(start_area - PATROOL_AREA_SIZE, PATROOL_AREA_SIZE)
-	patrool()
-	updateHighlightColour()
 
+func _ready() -> void:
+	#print(player,id)
+	#print(player, 2, id)
+	updateHighlightColour()
+	patrool()
+
+func init(pos, i, hp):
+	start_area = pos
+	position = start_area
+	patrool_area = Rect2i(start_area - Vector2i(200,200), Vector2i(200, 200))
+	id = i
+	health = hp
 
 func _physics_process(delta: float) -> void:
 	anim.play()
@@ -85,8 +97,10 @@ func patrool():
 	nav.target_position = current_goal
 
 
-func death():
-	queue_free()
+func death(dmg=100):
+	health -= dmg
+	if health < 0:
+		queue_free()
 
 
 func start_attack():
@@ -101,6 +115,7 @@ func start_attack():
 func retreat(dist=100, swing=false):
 	if nav.distance_to_target() < dist and not retreating:
 		retreating = true
+		#print(position, id)
 		var local = world.get_map_position(position)
 		var diff = nav.get_next_path_position() - position
 		var vect = Vector2i.ZERO

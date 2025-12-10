@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ck7y6ahtjugfh" path="res://Scripts/enemy_torch.gd" id="1_7cahf"]
 [ext_resource type="Texture2D" uid="uid://bphf3rs1xrjdp" path="res://NewAssets/Tiny Swords (Update 010)/Factions/Goblins/Troops/Torch/Purple/Torch_Purple.png" id="1_44law"]
-[ext_resource type="Script" path="res://Scripts/detection_area.gd" id="3_rmtnf"]
+[ext_resource type="Script" uid="uid://cmge8ar3y4oyr" path="res://Scripts/detection_area.gd" id="3_rmtnf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_287tu"]
 atlas = ExtResource("1_44law")
@@ -270,12 +270,11 @@ radius = 79.00633
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rmtnf"]
 size = Vector2(151, 72)
 
-[node name="Enemy_torch" type="CharacterBody2D" node_paths=PackedStringArray("nav")]
+[node name="Enemy_torch" type="CharacterBody2D"]
 z_index = 3
 collision_layer = 3
-collision_mask = 6
+collision_mask = 4
 script = ExtResource("1_7cahf")
-nav = NodePath("NavigationAgent2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7cahf")
@@ -290,7 +289,6 @@ avoidance_enabled = true
 debug_enabled = true
 
 [node name="Detection Area" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detection Area"]
 shape = SubResource("CircleShape2D_7cahf")
@@ -299,14 +297,12 @@ shape = SubResource("CircleShape2D_7cahf")
 script = ExtResource("3_rmtnf")
 
 [node name="AttackStart" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackStart"]
 position = Vector2(1, -1)
 shape = SubResource("CircleShape2D_n0eyd")
 
 [node name="AttackRange" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRange"]
 position = Vector2(0.5, -8)

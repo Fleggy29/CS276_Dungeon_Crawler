@@ -46,7 +46,7 @@ func updateHighlightColour():
 
 	highlightCol = config.get_value("Highlight", "player", highlightCol)
 	$Highlight.color = highlightCol
-
+	
 
 func _physics_process(delta: float) -> void:
 	#print(attackSpeed)

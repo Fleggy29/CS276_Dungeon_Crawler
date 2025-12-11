@@ -1,7 +1,9 @@
-class_name Enemy
+class_name Enemy_tnt
 extends CharacterBody2D
 
 @onready var anim = $AnimatedSprite2D
+@onready var spawner = $Spawner
+@onready var tnt = preload("res://Scenes/tnt.tscn")
 #@onready var world = $"../WorldGenerator"
 #@onready var attack_hitbox = $CollisionShapeAttackAside
 @onready var detection_area = $"Detection Area"
@@ -18,12 +20,14 @@ var retreating = false
 var cooling_down = false
 var disabled_attack = false
 var player_attackable = false
-var speed = 150
+var following = false
+var not_safe = false
+var speed = 100
 var health = 300
 var attack = 100
 var room_rect: Rect2i = Rect2i(Vector2i(0, 0), Vector2(1600, 1200))
 var start_area = room_rect.position + room_rect.size / 2
-var PATROOL_AREA_SIZE = Vector2i(200, 200)
+var PATROOL_AREA_SIZE = Vector2i(600, 600)
 var patrool_area = Rect2i(start_area - PATROOL_AREA_SIZE, PATROOL_AREA_SIZE)
 var sizer
 var id = -1
@@ -51,6 +55,7 @@ func _ready() -> void:
 	#print(player, 2, id)
 	updateHighlightColour()
 	last_pos = global_position
+	#print(world ,id)
 	patrool()
 
 func init(pos, i, hp):
@@ -64,16 +69,19 @@ func init(pos, i, hp):
 func _physics_process(delta: float) -> void:
 	anim.play()
 	var velocity = Vector2.ZERO # The player's movement vector.
+	#if player_attackable and not cooling_down and not retreating:
+		#start_attack()
 	if cooling_down:
 		pass
-	elif chasing:
+	elif following:
 		nav.target_position = player.global_position
-		if nav.distance_to_target() > 500:
-			detection_area.visible = true
+		if nav.distance_to_target() > 600:
+			print("I have missed the player")
 			nav.target_position = start_area
 			follow_sign.visible = false
 			returning = true
 			chasing = false
+			following = false
 			player.enemies_following.remove_at(player.enemies_following.find(self))
 	elif not returning:
 		if abs(position.x - current_goal.x) < 32 and abs(position.y - current_goal.y) < 32:
@@ -91,6 +99,10 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.normalized() * speed
 		if not cooling_down:
 			anim.flip_h = velocity.x < 0
+			if velocity.x > 0:
+				detection_area.scale.x = 1
+			else:
+				detection_area.scale.x = -1
 	else:
 		if not is_attacking:
 			anim.animation = "default"
@@ -151,18 +163,19 @@ func start_attack():
 	if disabled_attack:
 		return
 	is_attacking = true
-	if player.global_position.y - position.y > 16:
-		anim.animation = "hit_front"
-	elif position.y - player.global_position.y > 16:
-		anim.animation = "hit_back"
-	else:
-		anim.animation = "hit_aside"
+	anim.animation = "through_1"
+	await anim.animation_finished
+	var p = tnt.instantiate()
+	p.player = player
+	p.sender = self
+	#p.start = position
+	spawner.add_child(p)
+	anim.animation = "through_2"
 	await anim.animation_finished
 	is_attacking = false
 	retreat()
 	
-func retreat(dist=100, swing=false):
-	#if nav.distance_to_target() < dist and not retreating:
+func retreat(dist=400, swing=false, strafe=false):
 	if nav.distance_to_target() < dist:
 		retreating = true
 		#print(position, id)
@@ -182,6 +195,8 @@ func retreat(dist=100, swing=false):
 		else:
 			vect.y = 1 
 		var dist_to_run = randf_range(1.5, 3)
+		if strafe:
+			dist_to_run = randf_range(3, 5) 
 		var new_pos = Vector2(local) - vect * dist_to_run
 		new_pos.x *= 64
 		new_pos.y *= 64
@@ -192,23 +207,21 @@ func retreat(dist=100, swing=false):
 
 func cool_down(swing):
 	cooling_down = true
-	speed = 300
+	speed = 150
 	disabled_attack = true
-	var time = 0.8
+	var time = 1.0
 	if swing:
 		time = 0.3
 	await get_tree().create_timer(time).timeout
-	disabled_attack = false
-	if player_attackable:
+	await get_tree().create_timer(time).timeout
+	speed = 100
+	cooling_down = false
+	retreating = false
+	if !not_safe and player_attackable and chasing:
 		start_attack()
-		speed = 150
-		cooling_down = false
-		retreating = false
 	else:
-		await get_tree().create_timer(time).timeout
-		speed = 150
-		cooling_down = false
-		retreating = false
+		retreat()
+		
 	
 	
 func attacked():
@@ -217,12 +230,15 @@ func attacked():
 
 func _on_area_2d_body_entered(body) -> void:
 	if body == player:
+		print("I have spotted the player")
+		player_attackable = true
 		if not chasing:
 			player.enemies_following.append(self)
 		follow_sign.visible = true
-		detection_area.visible = false
 		chasing = true
+		print("I am chasing the Player")
 		nav.target_position = player.global_position
+		start_attack()
 
 
 func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
@@ -230,11 +246,30 @@ func _on_navigation_agent_2d_velocity_computed(safe_velocity: Vector2) -> void:
 
 
 func _on_attack_start_body_entered(body: Node2D) -> void:
-	if body == player:
+	if body == player and chasing:
+		print("The Player is in the attack range")
+		#print(1)through
 		player_attackable = true
-		start_attack()
+		#start_attack()
+		following = false
 
 
 func _on_attack_start_body_exited(body: Node2D) -> void:
-	if body == player:
+	if body == player and chasing:
+		print("The Player is not in the attack range - starting following")
 		player_attackable = false
+		following = true
+
+
+func _on_attack_escape_body_entered(body: Node2D) -> void:
+	if body == player:
+		not_safe = true
+		#print(retreating, chasing, cooling_down)
+		#retreat(100, false, true)
+		#if not retreating:
+			#retreat(100, false, true)
+
+
+func _on_attack_escape_body_exited(body: Node2D) -> void:
+	if body == player:
+		not_safe = false

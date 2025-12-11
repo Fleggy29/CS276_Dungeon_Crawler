@@ -4,13 +4,18 @@ static var player = null
 const TILESIZE = 64
 @onready var camera := $Camera2D
 @onready var inv := $Inventory
+<<<<<<< HEAD
 @onready var worldGen := $WorldGenerator
 
 static var shouldGenerate = true
+=======
+@onready var world = $WorldGenerator
+>>>>>>> 668d9cf60d39daddee6ee70f006a34cb03ea967e
 
 var config = ConfigFile.new()
 
 func _ready() -> void:
+<<<<<<< HEAD
 	player = $Player
 	camera.position = player.global_position
 
@@ -28,12 +33,17 @@ func _ready() -> void:
 	inv.position = camera.position - get_viewport().get_visible_rect().size / 2
 
 
+=======
+	var room_rect: Rect2i = Rect2i(Vector2i(0, 0), get_viewport().get_visible_rect().size)
+	$Camera2D.global_position = room_rect.position + room_rect.size / 2
+	#print(player,0)
+	#world.enemies_generator.give_player_world($Player, world)
+>>>>>>> 668d9cf60d39daddee6ee70f006a34cb03ea967e
 
 func _process(delta: float) -> void:
 	if Input.is_key_label_pressed(KEY_ESCAPE):
 		save_game()
 		get_tree().change_scene_to_file("res://Menu/main_menu.tscn")
-		#get_tree().quit()
 	else:
 		camera.position = $Player.global_position
 		inv.position = camera.position - get_viewport().get_visible_rect().size/2

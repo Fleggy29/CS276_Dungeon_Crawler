@@ -6,8 +6,8 @@ extends CharacterBody2D
 #@onready var attack_hitbox = $CollisionShapeAttackAside
 @onready var detection_area = $"Detection Area"
 #@onready var player = $"../Player"
-@export var player
-@export var world
+var player
+var world
 @onready var nav = $"NavigationAgent2D"
 var is_attacking = false
 var current_goal = Vector2i.ZERO
@@ -18,10 +18,15 @@ var cooling_down = false
 var disabled_attack = false
 var player_attackable = false
 var speed = 150
+<<<<<<< HEAD
+@export var patrool_area: Rect2i
+@export var start_area: Vector2i
+=======
 var health = 300
 var attack = 100
 var room_rect: Rect2i = Rect2i(Vector2i(0, 0), Vector2(1600, 1200))
 var start_area = room_rect.position + room_rect.size / 2
+>>>>>>> 668d9cf60d39daddee6ee70f006a34cb03ea967e
 var PATROOL_AREA_SIZE = Vector2i(200, 200)
 var patrool_area = Rect2i(start_area - PATROOL_AREA_SIZE, PATROOL_AREA_SIZE)
 var sizer
@@ -45,7 +50,6 @@ func _ready() -> void:
 	#print(player, 2, id)
 	updateHighlightColour()
 	patrool()
-	updateHighlightColour()
 
 func init(pos, i, hp):
 	start_area = pos
@@ -98,10 +102,16 @@ func patrool():
 	nav.target_position = current_goal
 
 
+<<<<<<< HEAD
+func death():
+	player.enemies_following.remove_at(player.enemies_following.find(self))
+	queue_free()
+=======
 func death(dmg=100):
 	health -= dmg
 	if health < 0:
 		queue_free()
+>>>>>>> 668d9cf60d39daddee6ee70f006a34cb03ea967e
 
 
 func start_attack():
@@ -116,6 +126,7 @@ func start_attack():
 func retreat(dist=100, swing=false):
 	if nav.distance_to_target() < dist and not retreating:
 		retreating = true
+		#print(position, id)
 		var local = world.get_map_position(position)
 		var diff = nav.get_next_path_position() - position
 		var vect = Vector2i.ZERO

@@ -20,7 +20,10 @@ config/icon="res://icon.svg"
 window/size/viewport_width=2048
 window/size/viewport_height=1152
 window/stretch/mode="viewport"
+<<<<<<< HEAD
+=======
 
+>>>>>>> 668d9cf60d39daddee6ee70f006a34cb03ea967e
 
 [global_group]
 

@@ -1,10 +1,13 @@
 class_name Global extends Node
 
+static var seed: int = 0
 static var player = null
 const TILESIZE = 64
 @onready var camera := $Camera2D
 @onready var inv := $Inventory
 @onready var worldGen := $WorldGenerator
+@onready var itemLoader := $WorldGenerator/ItemLoader
+@onready var enemyGen := $EnemiesGenerator
 
 static var shouldGenerate = true
 
@@ -13,18 +16,21 @@ var config = ConfigFile.new()
 func _ready() -> void:
 	player = $Player
 	camera.position = player.global_position
-
+	print("seed: ", seed)
 	if shouldGenerate:
-		worldGen.seed = 0 
-		if worldGen.seed == 0:
-			worldGen.rng.randomize()
-			worldGen.seed = worldGen.rng.randi()
-		worldGen.generate_world()
-		worldGen.spawn()
+		if Global.seed == 0:      # not set? randomize once
+			var r := RandomNumberGenerator.new()
+			r.randomize()
+			Global.seed = r.randi()
 	else:
 		load_game()
-		worldGen.generate_world()
-		worldGen.spawn()
+	print("seed: ", seed)
+	# Send the seed to all systems:
+	worldGen.set_seed(Global.seed)
+	itemLoader.set_seed(Global.seed)
+	enemyGen.set_seed(Global.seed)
+	#worldGen.generate_world()
+	worldGen.spawn()
 
 	
 	inv.position = camera.position - get_viewport().get_visible_rect().size / 2
@@ -61,7 +67,7 @@ func save_game() -> void:
 
 
 	var save_dict := {
-		"seed": worldGen.seed,
+		"seed": Global.seed,
 		"player": player_props
 	}
 
@@ -70,7 +76,7 @@ func save_game() -> void:
 	config.set_value("SaveState", "data", json_text)
 	config.save("res://SaveData/settings.config")
 
-	print("[Save] Game saved with seed =", worldGen.seed)
+	print("[Save] Game saved with seed =", Global.seed)
 
 
 func load_game() -> void:
@@ -93,8 +99,8 @@ func load_game() -> void:
 
 
 	if data.has("seed"):
-		worldGen.seed = int(data["seed"])
-		print("[Load] Loaded seed =", worldGen.seed)
+		Global.seed = int(data["seed"])
+		print("[Load] Loaded seed =", Global.seed)
 	else:
 		print("[Load] WARNING: No seed in save!")
 

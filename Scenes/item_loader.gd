@@ -2,9 +2,14 @@ extends Node
 
 # Loads all item definitions once.
 var item_defs : Array[Dictionary] = []
+var rng := RandomNumberGenerator.new()
 
-func _ready():
+func set_seed(s: int):
+	rng.seed = s
 	load_all_items()
+	print(get_random_items(5))
+
+
 
 
 func load_all_items():
@@ -60,6 +65,7 @@ func load_all_items():
 	print("items:", item_defs)
 
 func get_random_items(difficulty: int) -> Array:
+	print("SEEEED: ", Global.seed)
 	var threshold := difficulty * 10  
 	var remainingValue := threshold
 
@@ -75,7 +81,7 @@ func get_random_items(difficulty: int) -> Array:
 				continue  # can't afford this item, skip it
 
 			# Chance is absolute percentage (0–100)
-			var roll := randf() * 100.0
+			var roll := rng.randf() * 100.0
 			if roll <= item["chance"]:
 				# Success: select this item
 				results.append(item["scene"])

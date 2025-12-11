@@ -34,48 +34,20 @@ var spawn_enemies_room_data = []
 
 @export var generate_on_ready = false
 
-@export var seed: int
 var rng = RandomNumberGenerator.new()
 
-func _ready() -> void:
-	#print("og seed: ", seed)
-	if seed == 0:
-		rng.randomize()
-		seed = rng.randi()
-	else:
-		rng.seed = seed
-	
-	#print("seed: ", rng.seed)
+
+func set_seed(s: int):
+	rng.seed = s
 	noise = noise_height_text.noise
-	noise.seed = seed
-
-	if generate_on_ready:
-		player.global_position += Vector2(200, 200)
-		var lvl_data = generate_level(rng.randi_range(1, 3))
-		lvl = lvl_data[0]
-		var bridges = lvl_data[1]
-		for i in range(len(lvl)):
-			generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i], i)
-	enemies_generator.set_lvl(lvl)
-
-
-
-func generate_world():
-	if seed == 0:
-		rng.randomize()
-		seed = rng.randi()
-	rng.seed = seed
-	noise.seed = seed
-
-	#player.global_position += Vector2(200, 200)
-
+	noise.seed = s
+	player.global_position += Vector2(200, 200)
 	var lvl_data = generate_level(rng.randi_range(1, 3))
 	lvl = lvl_data[0]
 	var bridges = lvl_data[1]
 	for i in range(len(lvl)):
 		generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i], i)
-	#print(player, 1)
-	enemies_generator.set_lvl(lvl)
+
 		
 		
 func _process(delta: float) -> void:

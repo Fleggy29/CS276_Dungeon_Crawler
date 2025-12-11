@@ -15,6 +15,12 @@ func _ready() -> void:
 	#world.spawn()
 	
 
+var rng := RandomNumberGenerator.new()
+
+func set_seed(s: int):
+	rng.seed = s
+
+
 func set_lvl(l):
 	lvl = l
 
@@ -34,7 +40,7 @@ func spawn_enemies() -> void:
 func give_number_of_enemies(complexity, mn, mx):
 	var number_of_enemies
 	var avg = lerp(4.0, 7.0, complexity)
-	var random_offset = randf_range(-1.5, 2.5)
+	var random_offset = rng.randf_range(-1.5, 2.5)
 	number_of_enemies = int(round(avg + random_offset))
 	number_of_enemies = clamp(number_of_enemies, mn, mx)
 	return number_of_enemies
@@ -56,10 +62,10 @@ func spawn_enemies_room(x, y, w, h, complexity, hills, walkable_hills):
 	var grid = give_grid_for_lvl(x, y, w, h, 3, 3)
 	for i in number_of_enemies:
 		var enemy = enemy_scene_torch.instantiate()
-		var grid_palce = randi_range(0, len(grid) - 1)
+		var grid_palce = rng.randi_range(0, len(grid) - 1)
 		var grid_coords = grid[grid_palce]
-		var position_grid = Vector2i(randi_range(grid_coords.position.x, grid_coords.position.x + grid_coords.size.x), randi_range(grid_coords.position.y, grid_coords.position.y + grid_coords.size.y))
-		var health = lerp(randi_range(150, 250), randi_range(350, 450), complexity)
+		var position_grid = Vector2i(rng.randi_range(grid_coords.position.x, grid_coords.position.x + grid_coords.size.x), rng.randi_range(grid_coords.position.y, grid_coords.position.y + grid_coords.size.y))
+		var health = lerp(rng.randi_range(150, 250), rng.randi_range(350, 450), complexity)
 		grid.pop_at(grid_palce)
 		enemy.init(position_grid * TILESIZE, ids, health)
 		enemy.player = player

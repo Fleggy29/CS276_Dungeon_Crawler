@@ -11,12 +11,12 @@ var lvl
 var enemies = []
 
 func _ready() -> void:
-	world.spawn()
+	pass
+	#world.spawn()
 	
 
 func set_lvl(l):
 	lvl = l
-	print(lvl)
 
 func spawn_enemies() -> void:
 	for i in spawn_amount:
@@ -24,10 +24,8 @@ func spawn_enemies() -> void:
 		enemy.sizer = get_viewport().get_visible_rect().size
 		enemy.init(Vector2i(0, 0), i)
 		enemies.append(enemy)
-		print(player, 0, i)
 		#enemy.player = player= $"../Player"
 		enemy.player = player
-		print(enemy.player, 1, i)
 		enemy.world = world
 		
 		add_child(enemy)
@@ -54,6 +52,7 @@ func give_grid_for_lvl(x, y, w, h, dimw, dimh):
 
 func spawn_enemies_room(x, y, w, h, complexity, hills, walkable_hills):
 	var number_of_enemies = give_number_of_enemies(complexity, 3, 9)
+	#number_of_enemies = 2
 	var grid = give_grid_for_lvl(x, y, w, h, 3, 3)
 	for i in number_of_enemies:
 		var enemy = enemy_scene_torch.instantiate()

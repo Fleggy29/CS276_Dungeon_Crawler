@@ -5,7 +5,6 @@ var item_defs : Array[Dictionary] = []
 
 func _ready():
 	load_all_items()
-	print(get_random_items(5))
 
 
 func load_all_items():
@@ -61,18 +60,18 @@ func load_all_items():
 	print("items:", item_defs)
 
 func get_random_items(difficulty: int) -> Array:
-	var threshold := difficulty * 10  # adjust to your needs
-	var remaining_value := threshold
+	var threshold := difficulty * 10  
+	var remainingValue := threshold
 
 	var results := []
 	var pool := item_defs.duplicate()
 
-	# Continue attempting until no fits happen
+
 	while true:
-		var picked_any := false
+		var pickedAny := false
 
 		for item in pool:
-			if item["value"] > remaining_value:
+			if item["value"] > remainingValue:
 				continue  # can't afford this item, skip it
 
 			# Chance is absolute percentage (0–100)
@@ -80,10 +79,10 @@ func get_random_items(difficulty: int) -> Array:
 			if roll <= item["chance"]:
 				# Success: select this item
 				results.append(item["scene"])
-				remaining_value -= item["value"]
-				picked_any = true
+				remainingValue -= item["value"]
+				pickedAny = true
 
-		if not picked_any:
+		if not pickedAny:
 			break  # nothing rolled successfully; stop
 			
 	return results

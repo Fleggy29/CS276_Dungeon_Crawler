@@ -20,9 +20,11 @@ func _ready() -> void:
 			worldGen.rng.randomize()
 			worldGen.seed = worldGen.rng.randi()
 		worldGen.generate_world()
+		worldGen.spawn()
 	else:
 		load_game()
 		worldGen.generate_world()
+		worldGen.spawn()
 
 	
 	inv.position = camera.position - get_viewport().get_visible_rect().size / 2

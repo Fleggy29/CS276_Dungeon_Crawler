@@ -1,8 +1,9 @@
-[gd_scene load_steps=40 format=3 uid="uid://26f72w3m8qnc"]
+[gd_scene load_steps=41 format=3 uid="uid://26f72w3m8qnc"]
 
 [ext_resource type="Script" uid="uid://ck7y6ahtjugfh" path="res://Scripts/enemy_torch.gd" id="1_7cahf"]
 [ext_resource type="Texture2D" uid="uid://bphf3rs1xrjdp" path="res://NewAssets/Tiny Swords (Update 010)/Factions/Goblins/Troops/Torch/Purple/Torch_Purple.png" id="1_44law"]
 [ext_resource type="Script" uid="uid://cmge8ar3y4oyr" path="res://Scripts/detection_area.gd" id="3_rmtnf"]
+[ext_resource type="Texture2D" uid="uid://bkh4asvbr6ntd" path="res://NewAssets/Tiny Swords (Update 010)/Deco/14.png" id="4_n0eyd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_287tu"]
 atlas = ExtResource("1_44law")
@@ -184,16 +185,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_tk7xo")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tk7xo")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_scl1n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_scl1n")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dhkrs")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_dhkrs")
@@ -278,6 +270,7 @@ script = ExtResource("1_7cahf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7cahf")
+animation = &"hit_front"
 
 [node name="CollisionShapeDefault" type="CollisionShape2D" parent="."]
 position = Vector2(3.5, 8)
@@ -286,7 +279,6 @@ shape = SubResource("RectangleShape2D_7cahf")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 path_postprocessing = 1
 avoidance_enabled = true
-debug_enabled = true
 
 [node name="Detection Area" type="Area2D" parent="."]
 
@@ -321,6 +313,17 @@ offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 1, 1, 0)
+
+[node name="FollowSign" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="FollowSign"]
+position = Vector2(-3, -53)
+texture = ExtResource("4_n0eyd")
+
+[node name="Sprite2D2" type="Sprite2D" parent="FollowSign"]
+position = Vector2(-1, -52)
+texture = ExtResource("4_n0eyd")
+flip_h = true
 
 [connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
 [connection signal="body_entered" from="Detection Area" to="." method="_on_area_2d_body_entered"]

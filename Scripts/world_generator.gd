@@ -38,14 +38,14 @@ var spawn_enemies_room_data = []
 var rng = RandomNumberGenerator.new()
 
 func _ready() -> void:
-	print("og seed: ", seed)
+	#print("og seed: ", seed)
 	if seed == 0:
 		rng.randomize()
 		seed = rng.randi()
 	else:
 		rng.seed = seed
 	
-	print("seed: ", rng.seed)
+	#print("seed: ", rng.seed)
 	noise = noise_height_text.noise
 	noise.seed = seed
 
@@ -112,6 +112,7 @@ func generate_level(c):
 		
 
 func generate_room(coords_x, coords_y, bridges, lvl_number):
+	#print(9)
 	var threshold := 0.05
 	var kept_comps: Array = []
 	for _attempt in range(24):
@@ -206,9 +207,12 @@ func _paint(components: Array, coords_x, coords_y, bridges, lvl_number):
 	rocks_layer_1.set_cells_terrain_connect(hill_cells, terrain_set, 0)
 	ground_layer_1.set_cells_terrain_connect(hill_grass_cells, terrain_set, 1)
 	spawn_enemies_room_data.append([coords_x + MARGIN_W, coords_y + MARGIN_H, W - MARGIN_W * 2, H - MARGIN_H * 2, float(lvl_number) / float(len(lvl) - 1), hill_cells, hill_grass_cells])
+	#print(spawn_enemies_room_data, 13)
 	
 func spawn():
+	#print(10)
 	for i in spawn_enemies_room_data:
+		#print(11)
 		#print(i[0], "a", i[1], "a", i[2], "a", i[3])
 		enemies_generator.spawn_enemies_room(i[0], i[1], i[2], i[3], i[4], i[5], i[6])
 	
@@ -337,15 +341,18 @@ func get_player_terrain():
 func get_terrain(pos, local=true):
 	var tile_pos_ground
 	var tile_pos_rock
+	var tile_pos_rock_walk
 	if local:
-		tile_pos_ground = ground_layer_0.local_to_map(player.global_position)
-		tile_pos_rock = rocks_layer_1.local_to_map(player.global_position)
+		tile_pos_ground = ground_layer_0.local_to_map(pos)
+		tile_pos_rock = rocks_layer_1.local_to_map(pos)
+		tile_pos_rock_walk = ground_layer_1.local_to_map(pos)
 	else:
 		tile_pos_ground = pos
 		tile_pos_rock = pos
 	var tile_data_ground = ground_layer_0.get_cell_tile_data(tile_pos_ground)
+	var tile_data_rock_walk = ground_layer_1.get_cell_tile_data(tile_pos_rock_walk)
 	var tile_data_rock = rocks_layer_1.get_cell_tile_data(tile_pos_rock)
-	return {"ground": tile_data_ground, "rock": tile_data_rock}
+	return {"ground": tile_data_ground, "rock": tile_data_rock, "walkable_rock": tile_data_rock}
 
 
 func get_map_position(pos):

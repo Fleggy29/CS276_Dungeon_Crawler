@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dr7tipaw41b1g"]
+[gd_scene load_steps=10 format=3 uid="uid://dr7tipaw41b1g"]
 
 [ext_resource type="Script" uid="uid://deejhq53hc2vp" path="res://global.gd" id="1_6q3x5"]
 [ext_resource type="PackedScene" uid="uid://bv7lanwyp0tfh" path="res://player.tscn" id="3_8tbuy"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://d330l7g2hacyd" path="res://Items/wand/wand_item.tscn" id="5_hhif3"]
 [ext_resource type="PackedScene" uid="uid://dw885sf8joqje" path="res://Inventory.tscn" id="6_74nqk"]
 [ext_resource type="PackedScene" uid="uid://ctvexehac65sy" path="res://Scenes/world_generator.tscn" id="7_ol57v"]
-[ext_resource type="PackedScene" uid="uid://26f72w3m8qnc" path="res://Scenes/enemy_torch.tscn" id="8_gfa4i"]
 [ext_resource type="PackedScene" uid="uid://chllirxj3avs3" path="res://Items/spear/spear_item.tscn" id="9_snwe2"]
 [ext_resource type="PackedScene" uid="uid://d31ow2q8ngi2y" path="res://Scenes/enemies_generator.tscn" id="10_dbr38"]
 
@@ -22,10 +21,6 @@ script = ExtResource("1_6q3x5")
 z_index = 1
 position = Vector2(96, 96)
 scale = Vector2(4, 4)
-
-[node name="Enemy_torch" parent="." instance=ExtResource("8_gfa4i")]
-visible = false
-z_index = 1
 
 [node name="Sword_Item" parent="." instance=ExtResource("4_hhif3")]
 position = Vector2(176, 80)

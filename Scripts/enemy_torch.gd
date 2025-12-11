@@ -6,8 +6,8 @@ extends CharacterBody2D
 #@onready var attack_hitbox = $CollisionShapeAttackAside
 @onready var detection_area = $"Detection Area"
 #@onready var player = $"../Player"
-@export var player
-@export var world
+@export var player: Player
+@export var world: World
 @onready var nav = $"NavigationAgent2D"
 var is_attacking = false
 var current_goal = Vector2i.ZERO

@@ -1,3 +1,4 @@
+class_name  World
 extends Node2D
 
 @export var noise_height_text : NoiseTexture2D
@@ -54,7 +55,7 @@ func _ready() -> void:
 		var lvl = lvl_data[0]
 		var bridges = lvl_data[1]
 		for i in range(len(lvl)):
-			generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i])
+			generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i], i)
 
 
 
@@ -68,10 +69,10 @@ func generate_world():
 	#player.global_position += Vector2(200, 200)
 
 	var lvl_data = generate_level(rng.randi_range(1, 3))
-	var lvl = lvl_data[0]
+	lvl = lvl_data[0]
 	var bridges = lvl_data[1]
 	for i in range(len(lvl)):
-		generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i])
+		generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i], i)
 	#print(player, 1)
 	enemies_generator.set_lvl(lvl)
 		

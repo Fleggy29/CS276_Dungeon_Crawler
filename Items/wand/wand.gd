@@ -2,6 +2,9 @@ extends Item_holdable
 
 @export var projectile: PackedScene
 
+var chance : float = 20
+var value : int = 5
+
 func swing(atkSpd:int, projNum:int):
 	show()
 	if !tween or !tween.is_running():

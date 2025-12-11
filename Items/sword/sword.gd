@@ -1,5 +1,8 @@
 extends Item_holdable
 
+var chance : float = 40
+var value : int = 5
+
 func swing(atkSpd:int, projNum:int):
 	show()
 	for i in Global.player.enemies_following:

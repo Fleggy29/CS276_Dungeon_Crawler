@@ -7,6 +7,9 @@ extends Item_holdable
 		#tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 		#tween.tween_property(pivot, "rotation", pivot.rotation + PI/2, 1/(4*atkSpd)).set_trans(Tween.TRANS_QUAD)
 
+var chance : float = 30
+var value : int = 5
+
 func swing(atkSpd:int, projNum:int):
 	show()
 	for i in Global.player.enemies_following:

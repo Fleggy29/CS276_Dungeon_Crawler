@@ -82,6 +82,10 @@ func _process(delta: float) -> void:
 	get_player_terrain()
 
 
+func generate_items(difficulty: int) -> Array:
+	return []
+
+
 func generate_level(c):
 	var k = [[], [], [], []]
 	var res = [Vector2i(0, 0)]

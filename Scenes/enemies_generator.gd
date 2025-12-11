@@ -1,7 +1,7 @@
 extends Node2D
 
 const TILESIZE = Global.TILESIZE
-@onready var enemy_scene_torch = preload("res://Scenes/enemy_torch.tscn")
+@onready var enemy_scene_torch = preload("res://Scenes/enemy_tnt.tscn")
 @export var spawn_rect: Rect2 = Rect2(Vector2(-400, -300), Vector2(800, 600))
 var spawn_amount = 5
 var ids = 0

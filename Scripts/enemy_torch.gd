@@ -16,8 +16,8 @@ var cooling_down = false
 var disabled_attack = false
 var player_attackable = false
 var speed = 150
-var patrool_area
-var start_area
+@export var patrool_area: Rect2i
+@export var start_area: Vector2i
 var PATROOL_AREA_SIZE = Vector2i(200, 200)
 
 var highlightCol = Color(255,255,255,0)
@@ -86,6 +86,7 @@ func patrool():
 
 
 func death():
+	player.enemies_following.remove_at(player.enemies_following.find(self))
 	queue_free()
 
 

@@ -1,7 +1,7 @@
 class_name Projectile
 extends CharacterBody2D
 
-var once = false
+@export var once = false
 signal hitEnemy
 @export var speed = 100
 

@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://dj5600l4wwvch"]
+[gd_scene load_steps=4 format=3 uid="uid://dj5600l4wwvch"]
 
 [ext_resource type="Script" uid="uid://chhvkww3w6777" path="res://Scripts/camera_2d.gd" id="1_ev1no"]
 [ext_resource type="Texture2D" uid="uid://lhvvou7fj1wo" path="res://NewAssets/Tiny Swords (Update 010)/Terrain/Water/Water.png" id="2_0e4st"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ev1no"]
+size = Vector2(19.687403, 14.270835)
 
 [node name="Camera2D" type="Camera2D"]
 position_smoothing_enabled = true
@@ -10,3 +13,12 @@ script = ExtResource("1_ev1no")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(42, 25.7)
 texture = ExtResource("2_0e4st")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(6.4730644e-05, -4.8816204e-05)
+scale = Vector2(136.534, 115.2)
+shape = SubResource("RectangleShape2D_ev1no")
+
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

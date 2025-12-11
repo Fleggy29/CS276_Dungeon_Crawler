@@ -28,16 +28,49 @@ var source_id = 2
 var grass_tile = Vector2i(1,1)
 var land_tile = Vector2i(6,1)
 
-# Called when the node enters the scene tree for the first time.
+@export var generate_on_ready = false
+
+@export var seed: int
+var rng = RandomNumberGenerator.new()
+
 func _ready() -> void:
-	player.global_position += Vector2(200, 200)
+	print("og seed: ", seed)
+	if seed == 0:
+		rng.randomize()
+		seed = rng.randi()
+	else:
+		rng.seed = seed
+	
+	print("seed: ", rng.seed)
 	noise = noise_height_text.noise
-	var lvl_data = generate_level(randi_range(1, 3))
+	noise.seed = seed
+
+	if generate_on_ready:
+		player.global_position += Vector2(200, 200)
+		var lvl_data = generate_level(rng.randi_range(1, 3))
+		var lvl = lvl_data[0]
+		var bridges = lvl_data[1]
+		for i in range(len(lvl)):
+			generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i])
+
+
+
+func generate_world():
+	if seed == 0:
+		rng.randomize()
+		seed = rng.randi()
+	rng.seed = seed
+	noise.seed = seed
+
+	#player.global_position += Vector2(200, 200)
+
+	var lvl_data = generate_level(rng.randi_range(1, 3))
 	var lvl = lvl_data[0]
 	var bridges = lvl_data[1]
 	for i in range(len(lvl)):
-		var k = lvl[i]
-		generate_room(k.x * W, k.y * H, bridges[i])
+		generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i])
+
+
 		
 		
 func _process(delta: float) -> void:
@@ -50,20 +83,20 @@ func generate_level(c):
 	c = 4
 	var next = Vector2i(0, 0)
 	for j in range(3):
-		var r = randi_range(0, 3)
+		var r = rng.randi_range(0, 3)
 		while r in k[j]:
-			r = randi_range(0, 3)
+			r = rng.randi_range(0, 3)
 		k[j].append(r)
 		var mod = DIRS[r]
 		var cur = next
 		next = next + mod
 		res.insert(j + 1, next)
 		k[j + 1].append((r + 2) % 4)
-		var t = randi_range(0, 3 + j)
+		var t = rng.randi_range(0, 3 + j)
 		if t >= 2:
-			var coef = randi_range(0, 3)
+			var coef = rng.randi_range(0, 3)
 			while coef in k[j]:
-				coef = randi_range(0, 3)
+				coef = rng.randi_range(0, 3)
 			k[j].append(coef)
 			k.append([])
 			k[c].append((coef + 2) % 4)
@@ -127,7 +160,7 @@ func _paint(components: Array, coords_x, coords_y, bridges):
 				if p + Vector2i(1, 1) not in comp and p + Vector2i(-1, 1) not in comp:
 					border_rocks_cell[counter].append(p)
 		var l = len(border_rocks_cell[counter])
-		var st = border_rocks_cell[counter][randi_range(0, l-1)] + Vector2i(0, 1)
+		var st = border_rocks_cell[counter][rng.randi_range(0, l-1)] + Vector2i(0, 1)
 		hill_grass_cells.append(st - Vector2i(0, 1))
 		hill_cells.append(st)
 		counter += 1

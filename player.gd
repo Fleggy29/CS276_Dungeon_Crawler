@@ -6,19 +6,19 @@ var speed = 400
 var tween: Tween
 #var lastDir: RayCast2D
 var lastDir: Vector2
-var weapon: Area2D
-var items: Array[item_buff]
+@export var weapon: Area2D
+@export var items: Array[item_buff]
 signal swing_weapon
 signal picked_weapon
-var inventory: Dictionary[Vector2i, String]
-var inventorySize: int
+@export var inventory: Dictionary[Vector2i, String]
+@export var inventorySize: int
 const inventoryWidth = 9
 const inventoryHeight = 4
 
-var HPmax: int = 3
-var currentHP: int = HPmax
-var attackSpeed: int = 1
-var projectileNum: int = 0
+@export var HPmax: int = 3
+@export var currentHP: int = HPmax
+@export var attackSpeed: int = 1
+@export var projectileNum: int = 0
 
 var enemies_following: Array[CharacterBody2D]
 

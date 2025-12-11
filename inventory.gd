@@ -1,7 +1,7 @@
 extends Node2D
 
 const TILESIZE = Global.TILESIZE
-var inventory: Dictionary[Vector2i, String]
+@export var inventory: Dictionary[Vector2i, String]
 signal playerEquipWeapon
 signal playerEquipItem
 signal removeItemFromInventory

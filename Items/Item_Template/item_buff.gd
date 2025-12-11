@@ -1,6 +1,6 @@
 class_name item_buff extends Node
 
-var STAT: String = ""
+@export var STAT: String = ""
 @onready var p = get_parent()
 
 func add():

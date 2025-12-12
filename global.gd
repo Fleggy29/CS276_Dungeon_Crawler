@@ -37,12 +37,14 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_key_label_pressed(KEY_ESCAPE):
+		get_tree().paused = false
 		save_game()
 		get_tree().change_scene_to_file("res://Menu/main_menu.tscn")
 		#get_tree().quit()
 	else:
 		camera.position = $Player.global_position
 		inv.position = camera.position - get_viewport().get_visible_rect().size/2
+		$DeathScreen.position = camera.position - get_viewport().get_visible_rect().size/2
 
 
 func save_game() -> void:
@@ -56,6 +58,9 @@ func save_game() -> void:
 
 	player_props.velocity = [player.velocity.x, player.velocity.y] if "velocity" in prop_names else null
 	player_props.currentHP = player.currentHP if "currentHP" in prop_names else null
+	player_props.levelsCompleted = player.levelsCompleted if "levelsCompleted" in prop_names else null
+	player_props.enemiesKilled = player.enemiesKilled if "enemiesKilled" in prop_names else null
+	player_props.itemsPickedUp = player.itemsPickedUp if "itemsPickedUp" in prop_names else null
 	var inv_serialized: Dictionary = {}
 	for pos in player.inventory.keys():
 		var key_string = str(pos.x) + "," + str(pos.y)
@@ -70,7 +75,7 @@ func save_game() -> void:
 	}
 
 	var json_text := JSON.stringify(save_dict)
-
+	config.load("res://SaveData/settings.config")
 	config.set_value("SaveState", "data", json_text)
 	config.save("res://SaveData/settings.config")
 
@@ -124,6 +129,15 @@ func load_game() -> void:
 
 		if p.has("currentHP") and "currentHP" in prop_names:
 			player.currentHP = p["currentHP"]
+		
+		if p.has("levelsCompleted") and "levelsCompleted" in prop_names:
+			player.levelsCompleted = p["levelsCompleted"]
+		
+		if p.has("enemiesKilled") and "enemiesKilled" in prop_names:
+			player.enemiesKilled = p["enemiesKilled"]
+		
+		if p.has("itemsPickedUp") and "itemsPickedUp" in prop_names:
+			player.itemsPickedUp = p["itemsPickedUp"]
 
 		if "inventory" in p and "inventory" in prop_names:
 			var loaded_inventory: Dictionary[Vector2i, String] = {}

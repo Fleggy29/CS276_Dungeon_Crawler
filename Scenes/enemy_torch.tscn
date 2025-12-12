@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ck7y6ahtjugfh" path="res://Scripts/enemy_torch.gd" id="1_7cahf"]
 [ext_resource type="Texture2D" uid="uid://bphf3rs1xrjdp" path="res://NewAssets/Tiny Swords (Update 010)/Factions/Goblins/Troops/Torch/Purple/Torch_Purple.png" id="1_44law"]
-[ext_resource type="Script" uid="uid://cmge8ar3y4oyr" path="res://Scripts/detection_area.gd" id="3_rmtnf"]
+[ext_resource type="Script" path="res://Scripts/detection_area.gd" id="3_rmtnf"]
 [ext_resource type="Texture2D" uid="uid://bkh4asvbr6ntd" path="res://NewAssets/Tiny Swords (Update 010)/Deco/14.png" id="4_n0eyd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_287tu"]

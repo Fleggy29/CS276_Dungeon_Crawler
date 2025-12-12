@@ -1,7 +1,7 @@
 extends Node2D
 
 var config = ConfigFile.new()
-var savedScene
+var showResume: bool
 
 func _ready() -> void:
 	var err = config.load("res://SaveData/settings.config")
@@ -9,13 +9,22 @@ func _ready() -> void:
 	if err != OK:
 		return
 		
-	savedScene = config.get_value("SaveState", "data")
-	if savedScene != null:
+	showResume = config.get_value("SaveState", "showResume")
+	if showResume:
 		$Resume.show()
 		$Settings.position.y += 160
 		$Quit.position.y += 160
+	
 
 func _on_play_button_press() -> void:
+	config.set_value("SaveState", "showResume", true)
+	runState.levelsCompleted = 0
+	runState.enemiesKilled = 0
+	runState.itemsPickedUp = 0
+	runState.inventory = {}
+	runState.inventorySize = 0
+
+	config.save("res://SaveData/settings.config")
 	Global.shouldGenerate = true
 	get_tree().change_scene_to_file("res://global.tscn")
 

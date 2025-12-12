@@ -153,6 +153,8 @@ func death(dmg=100):
 		player.enemies_following.remove_at(player.enemies_following.find(self))
 		enemy_died.emit(self)
 		player.add_mana(mana_per_kill)
+		player.enemiesKilled += 1
+		runState.enemiesKilled = player.enemiesKilled
 		queue_free()
 
 

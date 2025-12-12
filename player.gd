@@ -10,7 +10,7 @@ var lastDir: Vector2
 @export var items: Array[item_buff]
 signal swing_weapon
 signal picked_weapon
-@export var inventory: Dictionary[Vector2i, String]
+@export var inventory: Dictionary
 @export var inventorySize: int
 const inventoryWidth = 9
 const inventoryHeight = 4
@@ -24,6 +24,12 @@ const inventoryHeight = 4
 
 signal health_changed
 signal mana_changed
+
+var levelsCompleted: int
+var enemiesKilled: int
+var itemsPickedUp: int
+
+signal dead
 
 var enemies_following: Array[CharacterBody2D]
 var bonuses = {"cool_down_bonus": 1}
@@ -39,10 +45,19 @@ var highlightCol = Color(255,255,255,0)
 func _on_enter_tree():
 	Global.player = self
 	
-func _ready() -> void:
+
+func _ready():
 	Global.player = self
 	updateHighlightColour()
 	emit_all_stats()
+
+	# Load persistent stats into this Player instance
+	levelsCompleted = runState.levelsCompleted
+	enemiesKilled = runState.enemiesKilled
+	itemsPickedUp = runState.itemsPickedUp
+	inventory = runState.inventory
+	inventorySize = runState.inventorySize
+
 
 
 func updateHighlightColour():
@@ -165,6 +180,9 @@ func equipItem (itemName: String) -> void:
 	
 		
 func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
+	itemsPickedUp += 1
+	runState.itemsPickedUp = itemsPickedUp
+
 	if inventorySize < inventoryWidth * inventoryHeight:
 		#print(10)
 		var emitterName = emitter.name.split("_")[0].to_lower()
@@ -175,6 +193,9 @@ func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 		inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
 		inventorySize += 1
 		#print(inventory)
+		runState.inventory = inventory
+		runState.inventorySize = inventorySize
+
 		emitter.call_deferred("queue_free")
 
 func take_damage(dmg):
@@ -186,6 +207,8 @@ func take_damage(dmg):
 		return true
 	currentHP = 0
 	health_changed.emit(currentHP, HPmax)
+	emit_signal("dead", levelsCompleted, enemiesKilled, itemsPickedUp)
+	#inventoryOpened = true
 	return false
 	
 	

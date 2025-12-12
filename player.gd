@@ -25,7 +25,7 @@ const inventoryHeight = 4
 signal health_changed
 signal mana_changed
 
-var levelsCompleted: int
+var levelsCompleted: int = 1
 var enemiesKilled: int
 var itemsPickedUp: int
 
@@ -33,6 +33,7 @@ signal dead
 
 var enemies_following: Array[CharacterBody2D]
 var bonuses = {"cool_down_bonus": 1}
+var lvls_passed = 1
 signal bonuses_updated
 
 signal open_inventory
@@ -48,14 +49,13 @@ func _on_enter_tree():
 func _ready() -> void:
 	Global.player = self
 	updateHighlightColour()
-	emit_all_stats()
-
-	# Load persistent stats into this Player instance
 	levelsCompleted = runState.levelsCompleted
 	enemiesKilled = runState.enemiesKilled
 	itemsPickedUp = runState.itemsPickedUp
 	inventory = runState.inventory
 	inventorySize = runState.inventorySize
+	lvls_passed = levelsCompleted
+	emit_all_stats()
 
 
 
@@ -167,7 +167,7 @@ func equipItem (itemName: String) -> void:
 			items.erase(item)
 	if items.size() < 3:
 		var i = load("res://Items/%s/%s.tscn" % [itemName,itemName]).instantiate()
-		i.lvl = levelsCompleted
+		i.lvl = lvls_passed
 		
 		
 		#print("name:", i.name)
@@ -182,7 +182,6 @@ func equipItem (itemName: String) -> void:
 func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 	itemsPickedUp += 1
 	runState.itemsPickedUp = itemsPickedUp
-
 	if inventorySize < inventoryWidth * inventoryHeight:
 		#print(10)
 		var emitterName = emitter.name.split("_")[0].to_lower()
@@ -196,7 +195,6 @@ func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 		runState.inventory = inventory
 		runState.inventorySize = inventorySize
 		add_mana(randi_range(5, 12))
-
 		emitter.call_deferred("queue_free")
 		
 func connect_ground_item(item):
@@ -212,7 +210,6 @@ func take_damage(dmg):
 	currentHP = 0
 	health_changed.emit(currentHP, HPmax)
 	emit_signal("dead", levelsCompleted, enemiesKilled, itemsPickedUp)
-	#inventoryOpened = true
 	return false
 	
 	

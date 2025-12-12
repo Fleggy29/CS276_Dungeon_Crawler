@@ -1,19 +1,14 @@
-[gd_scene load_steps=17 format=3 uid="uid://dr7tipaw41b1g"]
+[gd_scene load_steps=12 format=3 uid="uid://dr7tipaw41b1g"]
 
 [ext_resource type="Script" uid="uid://deejhq53hc2vp" path="res://global.gd" id="1_6q3x5"]
 [ext_resource type="PackedScene" uid="uid://bv7lanwyp0tfh" path="res://player.tscn" id="3_8tbuy"]
 [ext_resource type="PackedScene" uid="uid://boiml8aju2q4t" path="res://Items/sword/sword_item.tscn" id="4_hhif3"]
 [ext_resource type="PackedScene" uid="uid://cm4d2kpw0jhxt" path="res://next_level.tscn" id="5_6gmd3"]
 [ext_resource type="PackedScene" uid="uid://dj5600l4wwvch" path="res://Scenes/camera_2d.tscn" id="5_gfa4i"]
-[ext_resource type="PackedScene" uid="uid://d330l7g2hacyd" path="res://Items/wand/wand_item.tscn" id="5_hhif3"]
 [ext_resource type="PackedScene" uid="uid://dw885sf8joqje" path="res://Inventory.tscn" id="6_74nqk"]
 [ext_resource type="PackedScene" uid="uid://ctvexehac65sy" path="res://Scenes/world_generator.tscn" id="7_ol57v"]
-[ext_resource type="PackedScene" uid="uid://cepmuf38ny2qh" path="res://Items/bow/bow_item.tscn" id="8_lraed"]
-[ext_resource type="PackedScene" uid="uid://cnd10xigbvg4l" path="res://Items/sniper/sniper_item.tscn" id="9_jgphs"]
-[ext_resource type="PackedScene" uid="uid://chllirxj3avs3" path="res://Items/spear/spear_item.tscn" id="9_snwe2"]
 [ext_resource type="PackedScene" uid="uid://d31ow2q8ngi2y" path="res://Scenes/enemies_generator.tscn" id="10_dbr38"]
-[ext_resource type="Script" path="res://Scripts/ui.gd" id="10_htqha"]
-[ext_resource type="PackedScene" uid="uid://uqm627gojo46" path="res://Items/atkspd/atkspd_item.tscn" id="10_rg122"]
+[ext_resource type="Script" uid="uid://c6oxwabjn2hnb" path="res://Scripts/ui.gd" id="10_htqha"]
 [ext_resource type="Texture2D" uid="uid://d05h8f71ipva7" path="res://NewAssets/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="11_htqha"]
 [ext_resource type="PackedScene" uid="uid://clbu6jkbfiskx" path="res://death_screen.tscn" id="13_lraed"]
 
@@ -40,23 +35,6 @@ scale = Vector2(4, 4)
 
 [node name="Sword_Item" parent="." instance=ExtResource("4_hhif3")]
 position = Vector2(176, 80)
-scale = Vector2(2, 2)
-
-[node name="Wand_Item" parent="." instance=ExtResource("5_hhif3")]
-position = Vector2(176, 144)
-scale = Vector2(2, 2)
-
-[node name="bow_item" parent="." instance=ExtResource("8_lraed")]
-position = Vector2(200, 100)
-scale = Vector2(2, 2)
-
-[node name="spear_item" parent="." instance=ExtResource("9_snwe2")]
-scale = Vector2(2, 2)
-
-[node name="sniper_item" parent="." instance=ExtResource("9_jgphs")]
-position = Vector2(220, 100)
-
-[node name="atkSpd_item" parent="." instance=ExtResource("10_rg122")]
 scale = Vector2(2, 2)
 
 [node name="Inventory" parent="." instance=ExtResource("6_74nqk")]
@@ -104,10 +82,5 @@ z_index = 10
 [connection signal="dead" from="Player" to="DeathScreen" method="_on_player_dead"]
 [connection signal="open_inventory" from="Player" to="Inventory" method="_on_player_open_inventory"]
 [connection signal="ground_item_body_entered" from="Sword_Item" to="Player" method="_on_ground_item_body_entered"]
-[connection signal="ground_item_body_entered" from="Wand_Item" to="Player" method="_on_ground_item_body_entered"]
-[connection signal="ground_item_body_entered" from="bow_item" to="Player" method="_on_ground_item_body_entered"]
-[connection signal="ground_item_body_entered" from="spear_item" to="Player" method="_on_ground_item_body_entered"]
-[connection signal="ground_item_body_entered" from="sniper_item" to="Player" method="_on_ground_item_body_entered"]
-[connection signal="ground_item_body_entered" from="atkSpd_item" to="Player" method="_on_ground_item_body_entered"]
 [connection signal="playerEquipWeapon" from="Inventory" to="Player" method="equipWeapon"]
 [connection signal="removeItemFromInventory" from="Inventory" to="Player" method="removeItemFromInventory"]

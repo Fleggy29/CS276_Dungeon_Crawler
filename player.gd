@@ -27,6 +27,7 @@ signal mana_changed
 
 var enemies_following: Array[CharacterBody2D]
 var bonuses = {"cool_down_bonus": 1}
+var lvls_passed = 1
 signal bonuses_updated
 
 signal open_inventory
@@ -153,6 +154,7 @@ func equipItem (itemName: String) -> void:
 			items.erase(item)
 	if items.size() < 3:
 		var i = load("res://Items/%s/%s.tscn" % [itemName,itemName]).instantiate()
+		i.lvl = lvls_passed
 		
 		
 		#print("name:", i.name)
@@ -175,7 +177,11 @@ func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 		inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
 		inventorySize += 1
 		#print(inventory)
+		add_mana(randi_range(5, 12))
 		emitter.call_deferred("queue_free")
+		
+func connect_ground_item(item):
+	item.ground_item_body_entered.connect(_on_ground_item_body_entered)
 
 func take_damage(dmg):
 	#print("took danage")sdadsdas

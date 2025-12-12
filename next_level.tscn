@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cm4d2kpw0jhxt"]
+
+[ext_resource type="Script" uid="uid://sfvpor1fjnww" path="res://next_level.gd" id="1_bn2et"]
+[ext_resource type="Texture2D" uid="uid://su7hveiyhy53" path="res://Kenneys/kenney_tiny-battle/Tiles/tile_0175.png" id="2_snqbe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_35l6a"]
+
+[node name="NextLevel" type="Area2D"]
+script = ExtResource("1_bn2et")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_snqbe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_35l6a")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

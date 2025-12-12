@@ -31,10 +31,8 @@ func _ready() -> void:
 	enemyGen.set_seed(Global.seed)
 	#worldGen.generate_world()
 	worldGen.spawn()
-
 	
 	inv.position = camera.position - get_viewport().get_visible_rect().size / 2
-
 
 
 func _process(delta: float) -> void:

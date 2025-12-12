@@ -41,6 +41,10 @@ func set_seed(s: int):
 	rng.seed = s
 	noise = noise_height_text.noise
 	noise.seed = s
+	generateWorld()
+
+
+func generateWorld():
 	player.global_position += Vector2(200, 200)
 	var lvl_data = generate_level(rng.randi_range(1, 3))
 	lvl = lvl_data[0]
@@ -48,7 +52,6 @@ func set_seed(s: int):
 	for i in range(len(lvl)):
 		generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i], i)
 
-		
 		
 func _process(delta: float) -> void:
 	get_player_terrain()

@@ -11,7 +11,6 @@ func set_seed(s: int):
 
 
 
-
 func load_all_items():
 	var base_dir := "res://Items/"
 	var dir := DirAccess.open(base_dir)

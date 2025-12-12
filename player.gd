@@ -40,6 +40,8 @@ signal open_inventory
 signal close_inventory
 var inventoryOpened: bool
 
+var drawn = false
+
 var highlightCol = Color(255,255,255,0)
 
 
@@ -49,13 +51,14 @@ func _on_enter_tree():
 func _ready() -> void:
 	Global.player = self
 	updateHighlightColour()
+	emit_all_stats()
 	levelsCompleted = runState.levelsCompleted
 	enemiesKilled = runState.enemiesKilled
 	itemsPickedUp = runState.itemsPickedUp
 	inventory = runState.inventory
 	inventorySize = runState.inventorySize
 	lvls_passed = levelsCompleted
-	emit_all_stats()
+	
 
 
 
@@ -74,53 +77,58 @@ func emit_all_stats():
 	mana_changed.emit(currentMN, MNmax)
 
 func _physics_process(delta: float) -> void:
-	#print(attackSpeed)
-	velocity = Vector2.ZERO
 	$AnimatedSprite2D.play()
-	if (!tween or !tween.is_running()) and not inventoryOpened:
-		if Input.is_action_pressed("move_left") :
-		#and not checkCollisionBool($ColliderChecks/ColliderCheckW, 1):
-			#lastDir = $ColliderChecks/ColliderCheckW
-			lastDir = Vector2.LEFT
-			velocity += lastDir
-		if Input.is_action_pressed("move_right") :
-		#and not checkCollisionBool($ColliderChecks/ColliderCheckE, 1):
-			#lastDir = $ColliderChecks/ColliderCheckE
-			lastDir = Vector2.RIGHT
-			velocity += lastDir
-		if Input.is_action_pressed("move_up") :
-		#and not checkCollisionBool($ColliderChecks/ColliderCheckN, 1):
-			#lastDir = $ColliderChecks/ColliderCheckN
-			lastDir = Vector2.UP
-			velocity += lastDir
-		if Input.is_action_pressed("move_down") :
-		#and not checkCollisionBool($ColliderChecks/ColliderCheckS, 1):
-			#lastDir = $ColliderChecks/ColliderCheckS
-			lastDir = Vector2.DOWN
-			velocity += lastDir
-		velocity = velocity.normalized()
-		if Input.is_action_pressed("dash") :
-		#and not checkCollisionBool(lastDir, 2):
-			#move(lastDir.target_position.normalized() * 2)
-			velocity *= 2
-		#elif Input.is_action_pressed("dash") and not checkCollisionBool(lastDir, 1):
-			#move(lastDir.target_position.normalized())
-		velocity *= speed
-		move_and_slide()
-	if Input.is_action_pressed("attack") and weapon and not inventoryOpened:
-			emit_signal("swing_weapon", attackSpeed, projectileNum)
-	if Input.is_action_just_pressed("inventory"):
-		if not inventoryOpened:
-			emit_signal("open_inventory", inventory)
-			inventoryOpened = true
-		else:
-			emit_signal("close_inventory")
-			inventoryOpened = false
-	if velocity != Vector2.ZERO:
-		$AnimatedSprite2D.flip_h = velocity.x < 0
-		$AnimatedSprite2D.animation = "walk"
+	if drawn:
+		$AnimatedSprite2D.animation = "drawn"
 	else:
-		$AnimatedSprite2D.animation = "idle"
+		check_drawn()
+		#print(attackSpeed)
+		velocity = Vector2.ZERO
+		
+		if (!tween or !tween.is_running()) and not inventoryOpened:
+			if Input.is_action_pressed("move_left") :
+			#and not checkCollisionBool($ColliderChecks/ColliderCheckW, 1):
+				#lastDir = $ColliderChecks/ColliderCheckW
+				lastDir = Vector2.LEFT
+				velocity += lastDir
+			if Input.is_action_pressed("move_right") :
+			#and not checkCollisionBool($ColliderChecks/ColliderCheckE, 1):
+				#lastDir = $ColliderChecks/ColliderCheckE
+				lastDir = Vector2.RIGHT
+				velocity += lastDir
+			if Input.is_action_pressed("move_up") :
+			#and not checkCollisionBool($ColliderChecks/ColliderCheckN, 1):
+				#lastDir = $ColliderChecks/ColliderCheckN
+				lastDir = Vector2.UP
+				velocity += lastDir
+			if Input.is_action_pressed("move_down") :
+			#and not checkCollisionBool($ColliderChecks/ColliderCheckS, 1):
+				#lastDir = $ColliderChecks/ColliderCheckS
+				lastDir = Vector2.DOWN
+				velocity += lastDir
+			velocity = velocity.normalized()
+			if Input.is_action_pressed("dash") :
+			#and not checkCollisionBool(lastDir, 2):
+				#move(lastDir.target_position.normalized() * 2)
+				velocity *= 2
+			#elif Input.is_action_pressed("dash") and not checkCollisionBool(lastDir, 1):
+				#move(lastDir.target_position.normalized())
+			velocity *= speed
+			move_and_slide()
+		if Input.is_action_pressed("attack") and weapon and not inventoryOpened:
+				emit_signal("swing_weapon", attackSpeed, projectileNum)
+		if Input.is_action_just_pressed("inventory"):
+			if not inventoryOpened:
+				emit_signal("open_inventory", inventory)
+				inventoryOpened = true
+			else:
+				emit_signal("close_inventory")
+				inventoryOpened = false
+		if velocity != Vector2.ZERO:
+			$AnimatedSprite2D.flip_h = velocity.x < 0
+			$AnimatedSprite2D.animation = "walk"
+		else:
+			$AnimatedSprite2D.animation = "idle"
 
 
 func checkCollisionBool(ray: RayCast2D, distance: int) -> bool:
@@ -202,7 +210,7 @@ func connect_ground_item(item):
 
 func take_damage(dmg):
 	#print("took danage")sdadsdas
-	if currentHP >= dmg:
+	if currentHP > dmg:
 		currentHP -= dmg
 		health_changed.emit(currentHP, HPmax)
 		flash_red()
@@ -244,6 +252,20 @@ func add_mana(mana):
 
 func removeItemFromInventory(inv:Dictionary) -> void:
 	inventory = inv
+	
+func check_drawn():
+	
+	var under = $"../WorldGenerator".get_terrain(position, true)
+	#print(under)
+	if !under["ground"] and !under["rock"] and !under["walkable_rock"] and !under["foam"] and !under["bridges"]:
+		$AnimatedSprite2D.animation = "drawn"
+		drawn = true
+		z_index = 0
+		$"../WorldGenerator".z_index = 3
+		print(under)
+		await $AnimatedSprite2D.animation_finished
+		take_damage(currentHP)
+	
 
 
 #func _on_bow_item_ground_item_body_entered(body: Node2D, emitter: Node2D) -> void:

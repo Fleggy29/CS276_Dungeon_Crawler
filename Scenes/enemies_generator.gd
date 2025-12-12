@@ -81,17 +81,35 @@ func spawn_enemies_room(x, y, w, h, complexity, hills, walkable_hills):
 		enemy.enemy_died.connect(delete_enemy)
 		add_child(enemy)
 		if items:
-			var item = items[randi_range(0, len(items) - 1)]
-			items.pop_at(items.find(item))
-			#print(item)
-			i = item.instantiate()
-			i.global_position = position_grid * TILESIZE
-			i.scale = Vector2(3, 3)
-			i.z_index = 4
-			player.connect_ground_item(i)
-			#item.instantiate()
+			var item_scene = items[rng.randi_range(0, len(items) - 1)]
+			items.pop_at(items.find(item_scene))
+			var it = item_scene.instantiate()
+
+			# Set a proper name for inventory pickup
+			var path_split = item_scene.resource_path.split("/")  # ["res:", "Items", "Sword", "Sword_item.tscn"]
+			var folder_name = path_split[path_split.size() - 2]  # "Sword"
+			it.name = folder_name.to_lower() + "_item" + str(i)
+			print(it.name)
+
+			it.global_position = position_grid * TILESIZE
+			it.scale = Vector2(3, 3)
+			it.z_index = 4
+			player.connect_ground_item(it)
+			add_child(it)
+
+		
+		#if items:
+			#var item = items[rng.randi_range(0, len(items) - 1)]
+			#items.pop_at(items.find(item))
+			##print(item)
+			#i = item.instantiate()
+			#i.global_position = position_grid * TILESIZE
+			#i.scale = Vector2(3, 3)
+			#i.z_index = 4
+			#player.connect_ground_item(i)
+			##item.instantiate()
 			
-			add_child(i)
+			#add_child(i)
 			
 	#print(len(enemies))
 

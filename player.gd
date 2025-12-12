@@ -41,6 +41,7 @@ var inventoryOpened: bool
 
 var highlightCol = Color(255,255,255,0)
 
+var config = ConfigFile.new()
 
 func _on_enter_tree():
 	Global.player = self
@@ -48,14 +49,25 @@ func _on_enter_tree():
 func _ready() -> void:
 	Global.player = self
 	updateHighlightColour()
-	emit_all_stats()
 
-	# Load persistent stats into this Player instance
+	# Load persistent stats
 	levelsCompleted = runState.levelsCompleted
 	enemiesKilled = runState.enemiesKilled
 	itemsPickedUp = runState.itemsPickedUp
+
+	# Load vitals
+	currentHP = runState.currentHP
+	HPmax = runState.HPmax
+
+	currentMN = runState.currentMN
+	MNmax = runState.MNmax
+
+	# Load inventory
 	inventory = runState.inventory
 	inventorySize = runState.inventorySize
+
+	emit_all_stats()
+
 
 
 
@@ -179,41 +191,81 @@ func equipItem (itemName: String) -> void:
 		#print(attackSpeed)
 	
 		
-func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
+#func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
+	#itemsPickedUp += 1
+	#runState.itemsPickedUp = itemsPickedUp
+#
+	#if inventorySize < inventoryWidth * inventoryHeight:
+		##print(10)
+		#var emitterName = emitter.name.split("_")[0].to_lower()
+		#if emitterName == "atkspd":
+			#bonuses["cool_down_bonus"] = 0.7
+			#bonuses_updated.emit()
+		##var item = load("res://Items/%s/%s.tscn" % [emitterName,emitterName]).instantiate()
+		#inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
+		#inventorySize += 1
+		##print(inventory)
+		#runState.inventory = inventory
+		#runState.inventorySize = inventorySize
+		#add_mana(randi_range(5, 12))
+#
+		#emitter.call_deferred("queue_free")
+		
+func _on_ground_item_body_entered(body: Node2D, emitter: Node2D) -> void:
 	itemsPickedUp += 1
 	runState.itemsPickedUp = itemsPickedUp
 
 	if inventorySize < inventoryWidth * inventoryHeight:
-		#print(10)
-		var emitterName = emitter.name.split("_")[0].to_lower()
-		if emitterName == "atkspd":
-			bonuses["cool_down_bonus"] = 0.7
-			bonuses_updated.emit()
-		#var item = load("res://Items/%s/%s.tscn" % [emitterName,emitterName]).instantiate()
-		inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
+		# Ensure the emitter has a proper name
+		var emitterName = str(emitter.name).split("_")[0].to_lower()
+		if emitterName == "":
+			emitterName = "unknown_item"
+
+		print("picked up: ", emitterName)
+
+		# Store the level along with the item name in the inventory
+		var item_data = {
+			"name": emitterName,
+			"lvl": levelsCompleted  # store the level at pickup
+		}
+		inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = item_data
 		inventorySize += 1
-		#print(inventory)
+
 		runState.inventory = inventory
 		runState.inventorySize = inventorySize
 		add_mana(randi_range(5, 12))
 
 		emitter.call_deferred("queue_free")
+
+
+
 		
 func connect_ground_item(item):
 	item.ground_item_body_entered.connect(_on_ground_item_body_entered)
 
 func take_damage(dmg):
-	#print("took danage")sdadsdas
 	if currentHP >= dmg:
 		currentHP -= dmg
+		runState.currentHP = currentHP
 		health_changed.emit(currentHP, HPmax)
 		flash_red()
 		return true
+
 	currentHP = 0
+	runState.currentHP = currentHP
 	health_changed.emit(currentHP, HPmax)
+	config.set_value("SaveState", "showResume", true)
+	runState.levelsCompleted = 0
+	runState.enemiesKilled = 0
+	runState.itemsPickedUp = 0
+	runState.inventory = {}
+	runState.inventorySize = 0
+
+	config.save("res://SaveData/settings.config")
+	Global.shouldGenerate = true
 	emit_signal("dead", levelsCompleted, enemiesKilled, itemsPickedUp)
-	#inventoryOpened = true
 	return false
+
 	
 	
 func flash_red():
@@ -226,28 +278,26 @@ func flash_red():
 	t.tween_property(sprite, "modulate", Color(1, 1, 1), 0.15)
 	
 func use_mana(mana):
-	#print(currentMN)
 	if currentMN >= mana:
 		currentMN -= mana
+		runState.currentMN = currentMN
 		mana_changed.emit(currentMN, MNmax)
 		return true
-	#currentMN = 0
+
 	mana_changed.emit(currentMN, MNmax)
 	return false
 
+
 func add_mana(mana):
-	if currentMN <= MNmax:
-		currentMN += mana
-		mana_changed.emit(currentMN, MNmax)
-		return true
-	currentMN = MNmax
+	currentMN = min(currentMN + mana, MNmax)
+	runState.currentMN = currentMN
 	mana_changed.emit(currentMN, MNmax)
-	return false
+	return true
+
 
 
 func removeItemFromInventory(inv:Dictionary) -> void:
 	inventory = inv
-
-
-#func _on_bow_item_ground_item_body_entered(body: Node2D, emitter: Node2D) -> void:
-	#pass # Replace with function body.
+	runState.inventory = inv
+	runState.inventorySize = inv.size()
+	

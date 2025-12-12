@@ -40,20 +40,63 @@ func _process(delta: float) -> void:
 		
 
 
+#func _on_player_open_inventory(inv: Dictionary) -> void:
+	#show()
+	##print("inventory")
+	#inventory = inv
+	#var item: Area2D 
+	#for key in inv.keys():
+		#var itemName = inv[key]
+		#item = load("res://Items/%s/%s_item.tscn" % [itemName,itemName]).instantiate()
+		#item.position = key * TILESIZE + Vector2i(128, 128)
+		#item.scale = Vector2(2,2)
+		#item.collision_layer = 2
+		#item.collision_mask = 2
+		#item.add_to_group("inventory_item")
+		#add_child(item)
+		
 func _on_player_open_inventory(inv: Dictionary) -> void:
 	show()
-	#print("inventory")
 	inventory = inv
-	var item: Area2D 
+	var item: Area2D
 	for key in inv.keys():
-		var itemName = inv[key]
-		item = load("res://Items/%s/%s_item.tscn" % [itemName,itemName]).instantiate()
+		var item_data = inv[key]
+		if item_data == null or item_data.size() == 0:
+			continue  # skip empty slots
+
+		var itemName = item_data["name"]
+		var itemLevel = item_data.get("lvl", 1)  # default level = 1
+
+		# Instantiate the item
+		item = load("res://Items/%s/%s_item.tscn" % [itemName, itemName]).instantiate()
+
+		# Set level if the item has a 'lvl' property
+		if "lvl" in item:
+			item.lvl = itemLevel
+
+		# Set item position and appearance
 		item.position = key * TILESIZE + Vector2i(128, 128)
-		item.scale = Vector2(2,2)
+		item.scale = Vector2(2, 2)
 		item.collision_layer = 2
 		item.collision_mask = 2
 		item.add_to_group("inventory_item")
+
+		# Add level label for all items
+		var lvl_label = Label.new()
+		lvl_label.text = str(itemLevel)
+		lvl_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lvl_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		lvl_label.position = Vector2(5, -10)
+		lvl_label.add_theme_color_override("font_color", Color.WHITE)
+		lvl_label.add_theme_font_size_override("font_size", 8)
+		item.add_child(lvl_label)
+
 		add_child(item)
+
+
+
+
+
 	
 
 

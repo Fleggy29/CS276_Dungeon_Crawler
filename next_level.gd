@@ -7,5 +7,8 @@ func _on_body_entered(body: Node2D) -> void:
 		Global.seed = 0
 		body.levelsCompleted += 1
 		runState.levelsCompleted = body.levelsCompleted
+		runState.currentHP += 100
+		runState.currentMN += 30
+
 
 		SceneManager.restart_scene("res://global.tscn")

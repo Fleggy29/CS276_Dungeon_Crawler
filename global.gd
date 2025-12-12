@@ -33,7 +33,6 @@ func _ready() -> void:
 	worldGen.spawn()
 	
 	inv.position = camera.position - get_viewport().get_visible_rect().size / 2
-	$Sword_Item.global_position = player.position
 	print(worldGen.boat_pos)
 	$NextLevel.global_position = worldGen.boat_pos
 

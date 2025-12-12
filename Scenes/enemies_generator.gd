@@ -8,7 +8,9 @@ var ids = 0
 var lvl
 @onready var player = $"../Player"
 @onready var world = $"../WorldGenerator"
+@onready var item_generator = $"../WorldGenerator/ItemLoader"
 var enemies = []
+#var items = []
 
 func _ready() -> void:
 	pass
@@ -57,7 +59,11 @@ func give_grid_for_lvl(x, y, w, h, dimw, dimh):
 	
 
 func spawn_enemies_room(x, y, w, h, complexity, hills, walkable_hills):
+	#var items = item_generator.get_items(player.lvls_passed)
+	
+	#print(items)
 	var number_of_enemies = give_number_of_enemies(complexity, 3, 9)
+	var items = item_generator.get_items(number_of_enemies)
 	#number_of_enemies = 2
 	var grid = give_grid_for_lvl(x, y, w, h, 3, 3)
 	for i in number_of_enemies:
@@ -74,6 +80,19 @@ func spawn_enemies_room(x, y, w, h, complexity, hills, walkable_hills):
 		enemies.append(enemy)
 		enemy.enemy_died.connect(delete_enemy)
 		add_child(enemy)
+		if items:
+			var item = items[randi_range(0, len(items) - 1)]
+			items.pop_at(items.find(item))
+			#print(item)
+			i = item.instantiate()
+			i.global_position = position_grid * TILESIZE
+			i.scale = Vector2(3, 3)
+			i.z_index = 4
+			player.connect_ground_item(i)
+			#item.instantiate()
+			
+			add_child(i)
+			
 	#print(len(enemies))
 
 

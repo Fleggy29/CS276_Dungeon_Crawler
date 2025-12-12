@@ -33,6 +33,7 @@ signal dead
 
 var enemies_following: Array[CharacterBody2D]
 var bonuses = {"cool_down_bonus": 1}
+var lvls_passed = 1
 signal bonuses_updated
 
 signal open_inventory
@@ -45,7 +46,8 @@ var highlightCol = Color(255,255,255,0)
 func _on_enter_tree():
 	Global.player = self
 	
-func _ready() -> void:
+
+func _ready():
 	Global.player = self
 	updateHighlightColour()
 	emit_all_stats()
@@ -167,7 +169,7 @@ func equipItem (itemName: String) -> void:
 			items.erase(item)
 	if items.size() < 3:
 		var i = load("res://Items/%s/%s.tscn" % [itemName,itemName]).instantiate()
-		i.lvl = levelsCompleted
+		i.lvl = lvls_passed
 		
 		
 		#print("name:", i.name)
@@ -193,10 +195,13 @@ func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 		inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
 		inventorySize += 1
 		#print(inventory)
+<<<<<<< HEAD
 		runState.inventory = inventory
 		runState.inventorySize = inventorySize
-		add_mana(randi_range(5, 12))
 
+=======
+		add_mana(randi_range(5, 12))
+>>>>>>> 458975225c95c36cfd6196770f11d81950c82e6c
 		emitter.call_deferred("queue_free")
 		
 func connect_ground_item(item):

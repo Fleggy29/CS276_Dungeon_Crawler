@@ -7,7 +7,10 @@ var rng := RandomNumberGenerator.new()
 func set_seed(s: int):
 	rng.seed = s
 	load_all_items()
-	print(get_random_items(5))
+	
+func get_items(difficulty):
+	#print(get_random_items(difficulty))
+	return get_random_items(difficulty)
 
 
 
@@ -61,10 +64,13 @@ func load_all_items():
 				"value": inst.value,
 				"scene": load(item_scene_path)  # this is the version you return
 			})
-	print("items:", item_defs)
+	#var t = item_defs[0]["scene"]
+	#var k = t.instatiate()
+	#print(t)
+	#print("items:", item_defs)
 
 func get_random_items(difficulty: int) -> Array:
-	print("SEEEED: ", Global.seed)
+	#print("SEEEED: ", Global.seed)
 	var threshold := difficulty * 10  
 	var remainingValue := threshold
 

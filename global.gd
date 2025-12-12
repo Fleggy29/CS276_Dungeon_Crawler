@@ -16,7 +16,7 @@ var config = ConfigFile.new()
 func _ready() -> void:
 	player = $Player
 	camera.position = player.global_position
-	print("seed: ", seed)
+	#print("seed: ", seed)
 	if shouldGenerate:
 		if Global.seed == 0:      # not set? randomize once
 			var r := RandomNumberGenerator.new()
@@ -24,7 +24,7 @@ func _ready() -> void:
 			Global.seed = r.randi()
 	else:
 		load_game()
-	print("seed: ", seed)
+	#print("seed: ", seed)
 	# Send the seed to all systems:
 	worldGen.set_seed(Global.seed)
 	itemLoader.set_seed(Global.seed)
@@ -33,7 +33,9 @@ func _ready() -> void:
 	worldGen.spawn()
 	
 	inv.position = camera.position - get_viewport().get_visible_rect().size / 2
-
+	$Sword_Item.global_position = player.position
+	print(worldGen.boat_pos)
+	$NextLevel.global_position = worldGen.boat_pos
 
 func _process(delta: float) -> void:
 	if Input.is_key_label_pressed(KEY_ESCAPE):
@@ -79,7 +81,7 @@ func save_game() -> void:
 	config.set_value("SaveState", "data", json_text)
 	config.save("res://SaveData/settings.config")
 
-	print("[Save] Game saved with seed =", Global.seed)
+	#print("[Save] Game saved with seed =", Global.seed)
 
 
 func load_game() -> void:

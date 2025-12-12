@@ -31,6 +31,7 @@ var grass_tile = Vector2i(1,1)
 var land_tile = Vector2i(6,1)
 var lvl
 var spawn_enemies_room_data = []
+var boat_pos = Vector2i.ZERO
 
 @export var generate_on_ready = false
 
@@ -183,6 +184,20 @@ func _paint(components: Array, coords_x, coords_y, bridges, lvl_number):
 	rocks_layer_1.set_cells_terrain_connect(hill_cells, terrain_set, 0)
 	ground_layer_1.set_cells_terrain_connect(hill_grass_cells, terrain_set, 1)
 	spawn_enemies_room_data.append([coords_x + MARGIN_W, coords_y + MARGIN_H, W - MARGIN_W * 2, H - MARGIN_H * 2, float(lvl_number) / float(len(lvl) - 1), hill_cells, hill_grass_cells])
+	if lvl_number == len(lvl) - 1:
+		var cur = lvl[lvl_number]
+		var t = Vector2i.ZERO
+		#print(lvl)
+		if cur + Vector2i(0, -1) not in lvl:
+			t = ground_cells[12] + Vector2i(0, -1)
+		elif cur + Vector2i(0, 1) not in lvl:
+			t = ground_cells[-12] + Vector2i(0, 1)
+		elif cur + Vector2i(-1, 0) not in lvl:
+			t = ground_cells[len(ground_cells) / 2 - 7] + Vector2i(-1, 0)
+		elif cur + Vector2i(1, 0) not in lvl:
+			t = ground_cells[len(ground_cells) / 2 + 7] + Vector2i(1, 0)
+		boat_pos = ground_layer_0.map_to_local(t)
+		foam_layer.set_cell(t, 2, Vector2i.ZERO, 1)
 	#print(spawn_enemies_room_data, 13)
 	
 func spawn():

@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cnd10xigbvg4l" path="res://Items/sniper/sniper_item.tscn" id="9_jgphs"]
 [ext_resource type="PackedScene" uid="uid://chllirxj3avs3" path="res://Items/spear/spear_item.tscn" id="9_snwe2"]
 [ext_resource type="PackedScene" uid="uid://d31ow2q8ngi2y" path="res://Scenes/enemies_generator.tscn" id="10_dbr38"]
-[ext_resource type="Script" path="res://Scripts/ui.gd" id="10_htqha"]
+[ext_resource type="Script" uid="uid://c6oxwabjn2hnb" path="res://Scripts/ui.gd" id="10_htqha"]
 [ext_resource type="PackedScene" uid="uid://uqm627gojo46" path="res://Items/atkspd/atkspd_item.tscn" id="10_rg122"]
 [ext_resource type="Texture2D" uid="uid://d05h8f71ipva7" path="res://NewAssets/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="11_htqha"]
 [ext_resource type="PackedScene" uid="uid://clbu6jkbfiskx" path="res://death_screen.tscn" id="13_lraed"]
@@ -39,24 +39,30 @@ position = Vector2(500, 0)
 scale = Vector2(4, 4)
 
 [node name="Sword_Item" parent="." instance=ExtResource("4_hhif3")]
+visible = false
 position = Vector2(176, 80)
 scale = Vector2(2, 2)
 
 [node name="Wand_Item" parent="." instance=ExtResource("5_hhif3")]
+visible = false
 position = Vector2(176, 144)
 scale = Vector2(2, 2)
 
 [node name="bow_item" parent="." instance=ExtResource("8_lraed")]
+visible = false
 position = Vector2(200, 100)
 scale = Vector2(2, 2)
 
 [node name="spear_item" parent="." instance=ExtResource("9_snwe2")]
+visible = false
 scale = Vector2(2, 2)
 
 [node name="sniper_item" parent="." instance=ExtResource("9_jgphs")]
+visible = false
 position = Vector2(220, 100)
 
 [node name="atkSpd_item" parent="." instance=ExtResource("10_rg122")]
+visible = false
 scale = Vector2(2, 2)
 
 [node name="Inventory" parent="." instance=ExtResource("6_74nqk")]

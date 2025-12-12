@@ -167,8 +167,8 @@ func equipWeapon (weaponName: String) -> void:
 	if weapon:
 		weapon.call_deferred("queue_free")
 	weapon = load("res://Items/%s/%s.tscn" % [weaponName,weaponName]).instantiate()
-	#print(weapon)
-	#print(weapon.name)
+	print(weapon)
+	print(weapon.name)
 	var pivot = Node2D.new()
 	pivot.name = "Weapon_Pivot"
 	weapon.position = Vector2(8,0)
@@ -201,25 +201,6 @@ func equipItem (itemName: String) -> void:
 		#print(attackSpeed)
 	
 		
-#func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
-	#itemsPickedUp += 1
-	#runState.itemsPickedUp = itemsPickedUp
-#
-	#if inventorySize < inventoryWidth * inventoryHeight:
-		##print(10)
-		#var emitterName = emitter.name.split("_")[0].to_lower()
-		#if emitterName == "atkspd":
-			#bonuses["cool_down_bonus"] = 0.7
-			#bonuses_updated.emit()
-		##var item = load("res://Items/%s/%s.tscn" % [emitterName,emitterName]).instantiate()
-		#inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
-		#inventorySize += 1
-		##print(inventory)
-		#runState.inventory = inventory
-		#runState.inventorySize = inventorySize
-		#add_mana(randi_range(5, 12))
-#
-		#emitter.call_deferred("queue_free")
 		
 func _on_ground_item_body_entered(body: Node2D, emitter: Node2D) -> void:
 	itemsPickedUp += 1
@@ -235,7 +216,6 @@ func _on_ground_item_body_entered(body: Node2D, emitter: Node2D) -> void:
 			bonuses["cool_down_bonus"] = 0.7
 			bonuses_updated.emit()
 
-		print("picked up: ", emitterName)
 
 		# Store the level along with the item name in the inventory
 		var item_data = {
@@ -265,17 +245,11 @@ func take_damage(dmg):
 		health_changed.emit(currentHP, HPmax)
 		flash_red()
 		return true
-
+	print("DIED")
 	currentHP = 0
 	runState.currentHP = currentHP
 	health_changed.emit(currentHP, HPmax)
 	config.set_value("SaveState", "showResume", true)
-	runState.levelsCompleted = 0
-	runState.enemiesKilled = 0
-	runState.itemsPickedUp = 0
-	runState.inventory = {}
-	runState.inventorySize = 0
-
 	config.save("res://SaveData/settings.config")
 	Global.shouldGenerate = true
 	emit_signal("dead", levelsCompleted, enemiesKilled, itemsPickedUp)
@@ -326,9 +300,9 @@ func check_drawn():
 		drawn = true
 		z_index = 0
 		$"../WorldGenerator".z_index = 3
-		print(under)
-		await $AnimatedSprite2D.animation_finished
-		take_damage(currentHP)
+		#print(under)
+		await get_tree().create_timer(1).timeout
+		take_damage(currentHP + 100)
 	
 
 

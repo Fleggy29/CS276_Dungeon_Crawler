@@ -23,6 +23,8 @@ func _on_play_button_press() -> void:
 	runState.itemsPickedUp = 0
 	runState.inventory = {}
 	runState.inventorySize = 0
+	runState.currentHP = runState.HPmax
+	runState.currentMN = runState.MNmax
 
 	config.save("res://SaveData/settings.config")
 	Global.shouldGenerate = true

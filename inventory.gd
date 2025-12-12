@@ -59,6 +59,7 @@ func _on_player_open_inventory(inv: Dictionary) -> void:
 	show()
 	inventory = inv
 	var item: Area2D
+	var i = 0
 	for key in inv.keys():
 		var item_data = inv[key]
 		if item_data == null or item_data.size() == 0:
@@ -69,7 +70,8 @@ func _on_player_open_inventory(inv: Dictionary) -> void:
 
 		# Instantiate the item
 		item = load("res://Items/%s/%s_item.tscn" % [itemName, itemName]).instantiate()
-
+		
+		
 		# Set level if the item has a 'lvl' property
 		if "lvl" in item:
 			item.lvl = itemLevel
@@ -92,6 +94,7 @@ func _on_player_open_inventory(inv: Dictionary) -> void:
 		item.add_child(lvl_label)
 
 		add_child(item)
+		i += 1
 
 
 

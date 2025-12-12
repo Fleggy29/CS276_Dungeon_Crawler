@@ -71,7 +71,7 @@ func spawn_enemies_room(x, y, w, h, complexity, hills, walkable_hills):
 		var grid_palce = rng.randi_range(0, len(grid) - 1)
 		var grid_coords = grid[grid_palce]
 		var position_grid = Vector2i(rng.randi_range(grid_coords.position.x, grid_coords.position.x + grid_coords.size.x), rng.randi_range(grid_coords.position.y, grid_coords.position.y + grid_coords.size.y))
-		var increment = randi_range(60 * (player.lvls_passed - 1), 70 * (player.lvls_passed - 1))
+		var increment = randi_range(60 * (player.levelsCompleted - 1), 70 * (player.levelsCompleted - 1))
 		var health = lerp(rng.randi_range(100 + increment, 200 + increment), rng.randi_range(250 + increment, 300 + increment), complexity)
 		grid.pop_at(grid_palce)
 		enemy.init(position_grid * TILESIZE, ids, health)

@@ -15,12 +15,19 @@ signal picked_weapon
 const inventoryWidth = 9
 const inventoryHeight = 4
 
-@export var HPmax: int = 3
+@export var HPmax: int = 300
 @export var currentHP: int = HPmax
+@export var MNmax: int = 100
+@export var currentMN: int = MNmax
 @export var attackSpeed: int = 1
 @export var projectileNum: int = 0
 
+signal health_changed
+signal mana_changed
+
 var enemies_following: Array[CharacterBody2D]
+var bonuses = {"cool_down_bonus": 1}
+signal bonuses_updated
 
 signal open_inventory
 signal close_inventory
@@ -35,6 +42,7 @@ func _on_enter_tree():
 func _ready() -> void:
 	Global.player = self
 	updateHighlightColour()
+	emit_all_stats()
 
 
 func updateHighlightColour():
@@ -46,7 +54,10 @@ func updateHighlightColour():
 
 	highlightCol = config.get_value("Highlight", "player", highlightCol)
 	$Highlight.color = highlightCol
-	
+
+func emit_all_stats():
+	health_changed.emit(currentHP, HPmax)
+	mana_changed.emit(currentMN, MNmax)
 
 func _physics_process(delta: float) -> void:
 	#print(attackSpeed)
@@ -100,7 +111,7 @@ func _physics_process(delta: float) -> void:
 
 func checkCollisionBool(ray: RayCast2D, distance: int) -> bool:
 	if ray.is_colliding():
-		print(self.position.distance_to(ray.get_collision_point()))
+		#print(self.position.distance_to(ray.get_collision_point()))
 		if self.position.distance_to(ray.get_collision_point()) < distance * TILESIZE:
 			if ray.get_collider() is TileMapLayer:
 				return true
@@ -155,15 +166,61 @@ func equipItem (itemName: String) -> void:
 		
 func _on_ground_item_body_entered(body:Node2D, emitter:Node2D) -> void:
 	if inventorySize < inventoryWidth * inventoryHeight:
+		#print(10)
 		var emitterName = emitter.name.split("_")[0].to_lower()
-		print(emitterName)
+		if emitterName == "atkspd":
+			bonuses["cool_down_bonus"] = 0.7
+			bonuses_updated.emit()
 		#var item = load("res://Items/%s/%s.tscn" % [emitterName,emitterName]).instantiate()
 		inventory[Vector2i(inventorySize % inventoryWidth, inventorySize / inventoryWidth)] = emitterName
 		inventorySize += 1
-		print(inventory)
+		#print(inventory)
 		emitter.call_deferred("queue_free")
 
+func take_damage(dmg):
+	#print("took danage")sdadsdas
+	if currentHP >= dmg:
+		currentHP -= dmg
+		health_changed.emit(currentHP, HPmax)
+		flash_red()
+		return true
+	currentHP = 0
+	health_changed.emit(currentHP, HPmax)
+	return false
+	
+	
+func flash_red():
+	var sprite = $AnimatedSprite2D
+	sprite.modulate = Color.WHITE
+	var t = get_tree().create_tween()
+	t.set_trans(Tween.TRANS_LINEAR)
+	t.set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(sprite, "modulate", Color(1, 0, 0), 0.05)
+	t.tween_property(sprite, "modulate", Color(1, 1, 1), 0.15)
+	
+func use_mana(mana):
+	#print(currentMN)
+	if currentMN >= mana:
+		currentMN -= mana
+		mana_changed.emit(currentMN, MNmax)
+		return true
+	#currentMN = 0
+	mana_changed.emit(currentMN, MNmax)
+	return false
+
+func add_mana(mana):
+	if currentMN <= MNmax:
+		currentMN += mana
+		mana_changed.emit(currentMN, MNmax)
+		return true
+	currentMN = MNmax
+	mana_changed.emit(currentMN, MNmax)
+	return false
 
 
 func removeItemFromInventory(inv:Dictionary) -> void:
 	inventory = inv
+
+
+#func _on_bow_item_ground_item_body_entered(body: Node2D, emitter: Node2D) -> void:
+	#pass # Replace with function body.

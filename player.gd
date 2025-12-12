@@ -252,6 +252,7 @@ func take_damage(dmg):
 	config.set_value("SaveState", "showResume", true)
 	config.save("res://SaveData/settings.config")
 	Global.shouldGenerate = true
+	Global.seed = 0
 	emit_signal("dead", levelsCompleted, enemiesKilled, itemsPickedUp)
 	#inventoryOpened = true
 	return false

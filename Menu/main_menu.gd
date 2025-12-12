@@ -48,3 +48,11 @@ func _on_scene_changed():
 	var global = get_tree().current_scene
 	if global and global.has_method("load_game"):
 		global.load_game()
+
+
+func _on_credits_button_press() -> void:
+	get_tree().change_scene_to_file("res://Menu/credits.tscn")
+
+
+func _on_tutorial_button_press() -> void:
+	get_tree().change_scene_to_file("res://Menu/tutorial.tscn")

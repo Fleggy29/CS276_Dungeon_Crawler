@@ -41,7 +41,17 @@ visible = false
 position = Vector2(784, 576)
 text = "RESUME"
 
+[node name="Credits" parent="." instance=ExtResource("4_ohgnh")]
+position = Vector2(144, 896)
+text = "Credits"
+
+[node name="Tutorial" parent="." instance=ExtResource("4_ohgnh")]
+position = Vector2(1424, 896)
+text = "TUTORIAL"
+
 [connection signal="buttonPress" from="New Game" to="." method="_on_play_button_press"]
 [connection signal="buttonPress" from="Settings" to="." method="_on_settings_button_press"]
 [connection signal="buttonPress" from="Quit" to="." method="_on_quit_button_press"]
 [connection signal="buttonPress" from="Resume" to="." method="_on_resume_button_press"]
+[connection signal="buttonPress" from="Credits" to="." method="_on_credits_button_press"]
+[connection signal="buttonPress" from="Tutorial" to="." method="_on_tutorial_button_press"]

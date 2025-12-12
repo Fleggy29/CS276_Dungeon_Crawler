@@ -15,13 +15,15 @@ var lvl = 1
 
 func _ready() -> void:
 	hide()
+	player = get_node("/root/Global/Player")
 	Global.player.swing_weapon.connect(swing)
 	pivot = get_parent()
 	connect("body_entered", _on_body_entered)
-	set_stats(true, player.bonuses)
-	$CollisionShape2D.disabled = true
-	if player:
-		player.bonuses_updated.connect(update_bonuses)
+	if player != null:
+		set_stats(true, player.bonuses)
+		$CollisionShape2D.disabled = true
+		if player:
+			player.bonuses_updated.connect(update_bonuses)
 	adjust_to_lvl()
 	
 func _process(delta: float) -> void:

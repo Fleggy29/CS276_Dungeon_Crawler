@@ -67,7 +67,8 @@ func _on_player_open_inventory(inv: Dictionary) -> void:
 
 		var itemName = item_data["name"]
 		var itemLevel = item_data.get("lvl", 1)  # default level = 1
-
+		if itemName.contains("area"):
+			break
 		# Instantiate the item
 		item = load("res://Items/%s/%s_item.tscn" % [itemName, itemName]).instantiate()
 		

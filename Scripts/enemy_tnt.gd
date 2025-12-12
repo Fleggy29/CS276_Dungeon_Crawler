@@ -156,8 +156,6 @@ func death(dmg=100):
 	health -= dmg
 	if health < 0:
 		player.enemies_following.remove_at(player.enemies_following.find(self))
-		player.enemiesKilled += 1
-		runState.enemiesKilled = player.enemiesKilled
 		queue_free()
 
 

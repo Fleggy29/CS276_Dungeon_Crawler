@@ -260,7 +260,7 @@ radius = 188.01064
 radius = 79.00633
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rmtnf"]
-size = Vector2(151, 72)
+size = Vector2(195, 110)
 
 [node name="Enemy_torch" type="CharacterBody2D"]
 z_index = 3
@@ -270,7 +270,7 @@ script = ExtResource("1_7cahf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7cahf")
-animation = &"hit_front"
+animation = &"hit_back"
 
 [node name="CollisionShapeDefault" type="CollisionShape2D" parent="."]
 position = Vector2(3.5, 8)
@@ -329,3 +329,5 @@ flip_h = true
 [connection signal="body_entered" from="Detection Area" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="AttackStart" to="." method="_on_attack_start_body_entered"]
 [connection signal="body_exited" from="AttackStart" to="." method="_on_attack_start_body_exited"]
+[connection signal="body_entered" from="AttackRange" to="." method="_on_attack_range_body_entered"]
+[connection signal="body_exited" from="AttackRange" to="." method="_on_attack_range_body_exited"]

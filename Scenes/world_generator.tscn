@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bodiwa1c38h4w" path="res://NewAssets/Tiny Swords (Free Pack)/Terrain/Tilemap_color1.png" id="4_4gj3w"]
 [ext_resource type="Texture2D" uid="uid://cd0wgg5bwysmo" path="res://NewAssets/Tiny Swords (Update 010)/Terrain/Bridge/Bridge_All 2x.png" id="6_0jmbr"]
 [ext_resource type="Texture2D" uid="uid://x8dlc7678tk5" path="res://NewAssets/Tiny Swords (Update 010)/Terrain/Ground/mergedTest.png" id="6_hno1s"]
-[ext_resource type="Script" uid="uid://dgubojqjnd4le" path="res://Scenes/item_loader.gd" id="7_0jmbr"]
+[ext_resource type="Script" path="res://Scenes/item_loader.gd" id="7_0jmbr"]
 
 [sub_resource type="Gradient" id="Gradient_wi5qt"]
 offsets = PackedFloat32Array(0, 0.17183101, 0.32999998, 0.57, 0.81)

@@ -5,6 +5,7 @@ extends CharacterBody2D
 #@onready var world = $"../WorldGenerator"
 #@onready var attack_hitbox = $CollisionShapeAttackAside
 @onready var detection_area = $"Detection Area"
+@onready var attack_hitboxes = $AttackRange
 #@onready var player = $"../Player"
 var player
 var world
@@ -18,9 +19,11 @@ var retreating = false
 var cooling_down = false
 var disabled_attack = false
 var player_attackable = false
+var player_takes_damage = false
 var speed = 150
 var health = 300
 var attack = 100
+var damage_value = 10
 var room_rect: Rect2i = Rect2i(Vector2i(0, 0), Vector2(1600, 1200))
 var start_area = room_rect.position + room_rect.size / 2
 var PATROOL_AREA_SIZE = Vector2i(200, 200)
@@ -31,6 +34,8 @@ var last_pos
 var move_tolerance = 10
 var still_time = 0.0
 var threshold_time = 2.0
+var mana_per_kill = 10
+signal enemy_died
 
 var highlightCol = Color(255,255,255,0)
 
@@ -86,6 +91,7 @@ func _physics_process(delta: float) -> void:
 		var next = nav.get_next_path_position();
 		velocity = global_position.direction_to(next) * speed;
 	if velocity != Vector2.ZERO:
+		#if not is_attacking and not cooling_down:
 		if not is_attacking:
 			anim.animation = "walk"
 		velocity = velocity.normalized() * speed
@@ -142,8 +148,11 @@ func patrool():
 
 func death(dmg=100):
 	health -= dmg
+	flash_red()
 	if health < 0:
 		player.enemies_following.remove_at(player.enemies_following.find(self))
+		enemy_died.emit(self)
+		player.add_mana(mana_per_kill)
 		queue_free()
 
 
@@ -151,14 +160,26 @@ func start_attack():
 	if disabled_attack:
 		return
 	is_attacking = true
+	var old_hit_box_position = attack_hitboxes.position
+	#print(old_hit_box_position)
 	if player.global_position.y - position.y > 16:
+		attack_hitboxes.position = old_hit_box_position + Vector2(0, 50)
+		#attack_hitboxes.force_update_transform()
 		anim.animation = "hit_front"
 	elif position.y - player.global_position.y > 16:
+		attack_hitboxes.position = old_hit_box_position + Vector2(0, -50)
+		#attack_hitboxes.force_update_transform()
 		anim.animation = "hit_back"
 	else:
 		anim.animation = "hit_aside"
 	await anim.animation_finished
+	#print(player_takes_damage)
+	if player_takes_damage:
+		#print(1)
+		player.take_damage(damage_value)
 	is_attacking = false
+	attack_hitboxes.position = Vector2(0,0)
+	#attack_hitboxes.force_update_transform()
 	retreat()
 	
 func retreat(dist=100, swing=false):
@@ -197,23 +218,36 @@ func cool_down(swing):
 	var time = 0.8
 	if swing:
 		time = 0.3
+	#anim.animation = "default"
 	await get_tree().create_timer(time).timeout
+	
 	disabled_attack = false
 	if player_attackable:
 		start_attack()
 		speed = 150
 		cooling_down = false
 		retreating = false
+		#anim.animation = "walk"
 	else:
 		await get_tree().create_timer(time).timeout
 		speed = 150
 		cooling_down = false
 		retreating = false
+		#anim.animation = "walk"
 	
 	
 func attacked():
 	pass
 	
+
+func flash_red():
+	var sprite = $AnimatedSprite2D
+	sprite.modulate = Color.WHITE
+	var t = get_tree().create_tween()
+	t.set_trans(Tween.TRANS_LINEAR)
+	t.set_ease(Tween.EASE_IN_OUT)
+	t.tween_property(sprite, "modulate", Color(1, 0, 0), 0.05)
+	t.tween_property(sprite, "modulate", Color(1, 1, 1), 0.15)
 
 func _on_area_2d_body_entered(body) -> void:
 	if body == player:
@@ -238,3 +272,15 @@ func _on_attack_start_body_entered(body: Node2D) -> void:
 func _on_attack_start_body_exited(body: Node2D) -> void:
 	if body == player:
 		player_attackable = false
+		
+
+func _on_attack_range_body_entered(body: Node2D) -> void:
+	if body == player:
+		player_takes_damage = true
+		
+
+
+func _on_attack_range_body_exited(body: Node2D) -> void:
+	if body == player:
+		player_takes_damage = false
+		#print(player_takes_damage)

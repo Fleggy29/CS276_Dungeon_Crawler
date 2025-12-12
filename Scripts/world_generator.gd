@@ -36,7 +36,6 @@ var spawn_enemies_room_data = []
 
 var rng = RandomNumberGenerator.new()
 
-
 func set_seed(s: int):
 	rng.seed = s
 	noise = noise_height_text.noise
@@ -51,16 +50,14 @@ func generateWorld():
 	var bridges = lvl_data[1]
 	for i in range(len(lvl)):
 		generate_room(lvl[i].x * W, lvl[i].y * H, bridges[i], i)
-
 		
 func _process(delta: float) -> void:
 	get_player_terrain()
 
-
 func generate_items(difficulty: int) -> Array:
 	return []
-
-
+	
+	
 func generate_level(c):
 	var k = [[], [], [], []]
 	var res = [Vector2i(0, 0)]

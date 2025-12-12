@@ -1,7 +1,7 @@
 extends Node2D
 
 const TILESIZE = Global.TILESIZE
-@onready var enemy_scene_torch = preload("res://Scenes/enemy_tnt.tscn")
+@onready var enemy_scene_torch = preload("res://Scenes/enemy_torch.tscn")
 @export var spawn_rect: Rect2 = Rect2(Vector2(-400, -300), Vector2(800, 600))
 var spawn_amount = 5
 var ids = 0
@@ -14,13 +14,12 @@ func _ready() -> void:
 	pass
 	#world.spawn()
 	
-
 var rng := RandomNumberGenerator.new()
 
 func set_seed(s: int):
 	rng.seed = s
-
-
+	
+	
 func set_lvl(l):
 	lvl = l
 
@@ -36,6 +35,7 @@ func spawn_enemies() -> void:
 		
 		add_child(enemy)
 		
+
 
 func give_number_of_enemies(complexity, mn, mx):
 	var number_of_enemies
@@ -72,8 +72,14 @@ func spawn_enemies_room(x, y, w, h, complexity, hills, walkable_hills):
 		enemy.world = world
 		ids += 1
 		enemies.append(enemy)
+		enemy.enemy_died.connect(delete_enemy)
 		add_child(enemy)
+	#print(len(enemies))
 
+
+func delete_enemy(enemy):
+	enemies.pop_at(enemies.find(enemy))
+	#print(len(enemies))
 		
 #func give_player_world(p, w):
 	#for enemy in enemies:

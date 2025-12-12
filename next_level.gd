@@ -1,7 +1,8 @@
 extends Area2D
 
-
 func _on_body_entered(body: Node2D) -> void:
-	if body == Player:
+	if body is Player:
+		self.monitoring = false  # prevent double triggers
 		Global.shouldGenerate = true
-		get_tree().change_scene_to_file("res://global.tscn")
+		Global.seed = 0
+		SceneManager.restart_scene("res://global.tscn")

@@ -12,6 +12,7 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
+		#print(1)
 		emit_signal("ground_item_body_entered", body, self)
 
 func updateHighlightColour():

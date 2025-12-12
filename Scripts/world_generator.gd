@@ -13,6 +13,7 @@ extends Node2D
 var player_position_on_floor = true
 var passing_ladder = false
 var noise : Noise
+var foam_cells = []
 
 const W = 32
 const MARGIN_W = 4
@@ -153,6 +154,7 @@ func _paint(components: Array, coords_x, coords_y, bridges, lvl_number):
 		for x in range(coords_x + MARGIN_W, coords_x + W - MARGIN_W):
 			if x == coords_x + MARGIN_W or x == coords_x + W - MARGIN_W - 1 or y == coords_y + MARGIN_H or y == coords_y + H - MARGIN_H - 1:
 				foam_layer.set_cell(Vector2i(x, y), 2, Vector2i.ZERO, 1)
+				foam_cells.append(Vector2i(x, y))
 			var p := Vector2i(x, y)
 			ground_cells.append(p)
 	var bridges_cells = []
@@ -198,6 +200,7 @@ func _paint(components: Array, coords_x, coords_y, bridges, lvl_number):
 			t = ground_cells[len(ground_cells) / 2 + 7] + Vector2i(1, 0)
 		boat_pos = ground_layer_0.map_to_local(t)
 		foam_layer.set_cell(t, 2, Vector2i.ZERO, 1)
+		foam_cells.append(t)
 	#print(spawn_enemies_room_data, 13)
 	
 func spawn():
@@ -333,17 +336,26 @@ func get_terrain(pos, local=true):
 	var tile_pos_ground
 	var tile_pos_rock
 	var tile_pos_rock_walk
+	var tile_pos_foam
+	var tile_pos_bridges
 	if local:
 		tile_pos_ground = ground_layer_0.local_to_map(pos)
 		tile_pos_rock = rocks_layer_1.local_to_map(pos)
 		tile_pos_rock_walk = ground_layer_1.local_to_map(pos)
+		tile_pos_foam = foam_layer.local_to_map(pos)
+		tile_pos_bridges = bridges_layer.local_to_map(pos)
 	else:
 		tile_pos_ground = pos
 		tile_pos_rock = pos
+		tile_pos_rock_walk = pos
+		tile_pos_foam = pos
+		tile_pos_bridges = pos
 	var tile_data_ground = ground_layer_0.get_cell_tile_data(tile_pos_ground)
 	var tile_data_rock_walk = ground_layer_1.get_cell_tile_data(tile_pos_rock_walk)
 	var tile_data_rock = rocks_layer_1.get_cell_tile_data(tile_pos_rock)
-	return {"ground": tile_data_ground, "rock": tile_data_rock, "walkable_rock": tile_data_rock}
+	var tile_data_foam = tile_pos_foam in foam_cells
+	var tile_data_bridges= bridges_layer.get_cell_tile_data(tile_pos_bridges)
+	return {"ground": tile_data_ground, "rock": tile_data_rock, "walkable_rock": tile_data_rock, "foam": tile_data_foam, "bridges": tile_data_bridges}
 
 
 func get_map_position(pos):

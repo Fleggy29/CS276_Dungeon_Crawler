@@ -47,7 +47,6 @@ func _process(delta: float) -> void:
 		inv.position = camera.position - get_viewport().get_visible_rect().size/2
 		$DeathScreen.position = camera.position - get_viewport().get_visible_rect().size/2
 
-
 func save_game() -> void:
 	var player_props := {}
 	var prop_names := []
